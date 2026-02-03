@@ -1,7 +1,10 @@
 import { db } from "./firebase.js";
 import {
-  doc, getDoc, setDoc,
-  collection, getDocs,
+  doc,
+  getDoc,
+  setDoc,
+  collection,
+  getDocs,
   serverTimestamp
 } from "https://www.gstatic.com/firebasejs/12.8.0/firebase-firestore.js";
 
@@ -84,29 +87,16 @@ async function loadSundayMsg() {
   const isHol = await isHoliday();
   if (new Date().getDay() === 0 && !isHol && sundayMsg) {
     sundayMsg.style.display = "block";
-    sundayMsg.innerText =
-      "📌 Sunday Special Classes – Attendance Mandatory";
+    sundayMsg.innerText = "😄 Sunday have a fun day!";
   }
 }
 
 /* ===========================
-   GLOBAL DAILY TOTAL
-=========================== */
-async function ensureDailyTotal(subject) {
-  if (await isHoliday()) return;
-
-  const ref = doc(db, "dailyClasses", today, "subjects", subject);
-  const snap = await getDoc(ref);
-
-  if (!snap.exists()) {
-    await setDoc(ref, { total: 1 });
-  }
-}
-
-/* ===========================
-   MARK ATTENDANCE
+   MARK ATTENDANCE (FIXED)
 =========================== */
 window.markAttendance = async (subject, status) => {
+  if (await isHoliday()) return;
+
   const dailyRef = doc(
     db,
     "attendance",
@@ -117,9 +107,11 @@ window.markAttendance = async (subject, status) => {
     subject
   );
 
-  const snap = await getDoc(dailyRef);
-  if (snap.exists() && snap.data().marked === true) return;
+  // ⛔ Prevent double marking
+  const dailySnap = await getDoc(dailyRef);
+  if (dailySnap.exists() && dailySnap.data().marked === true) return;
 
+  // ✅ Save daily attendance
   await setDoc(
     dailyRef,
     {
@@ -130,6 +122,7 @@ window.markAttendance = async (subject, status) => {
     { merge: true }
   );
 
+  /* ===== USER SUMMARY (PER USER, PER SUBJECT) ===== */
   const summaryRef = doc(
     db,
     "attendanceSummary",
@@ -139,17 +132,29 @@ window.markAttendance = async (subject, status) => {
   );
 
   const sumSnap = await getDoc(summaryRef);
-  let present = sumSnap.exists() ? sumSnap.data().present || 0 : 0;
 
+  let present = 0;
+  let total = 0;
+
+  if (sumSnap.exists()) {
+    present = sumSnap.data().present || 0;
+    total = sumSnap.data().total || 0;
+  } else {
+    // 🔒 HARD INIT for brand-new user & subject
+    await setDoc(summaryRef, {
+      present: 0,
+      total: 0
+    });
+  }
+
+  total++;
   if (status === "present") present++;
 
-  const dailySnap = await getDoc(
-    doc(db, "dailyClasses", today, "subjects", subject)
+  await setDoc(
+    summaryRef,
+    { present, total },
+    { merge: true }
   );
-
-  const total = dailySnap.exists() ? dailySnap.data().total : 0;
-
-  await setDoc(summaryRef, { present, total }, { merge: true });
 
   loadToday();
   loadSummary();
@@ -177,7 +182,6 @@ async function loadToday() {
 
   for (const c of classes) {
     const key = normalizeSubject(c.subject);
-    await ensureDailyTotal(key);
 
     const ref = doc(
       db,
@@ -224,7 +228,7 @@ async function loadToday() {
 }
 
 /* ===========================
-   LOAD SUMMARY + % BAR
+   LOAD SUMMARY
 =========================== */
 async function loadSummary() {
   summaryBox.innerHTML = "";

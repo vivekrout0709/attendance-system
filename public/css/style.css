@@ -521,4 +521,34 @@ header {
 .wa-box .cancel:hover {
   background: rgba(0,0,0,0.05);
 }
+/* =========================
+   LOGIN ↔ SIGNUP ANIMATION
+========================= */
+
+.form {
+  display: none;
+  animation: slideFade .4s ease;
+}
+
+.form.active {
+  display: block;
+}
+
+@keyframes slideFade {
+  from {
+    opacity: 0;
+    transform: translateX(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+.login-card a {
+  cursor: pointer;
+  color: #2563eb;
+  font-weight: 600;
+  text-decoration: none;
+}
 

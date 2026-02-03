@@ -15,7 +15,7 @@
 
 <div class="login-wrapper">
 
-  <!-- Animation -->
+  <!-- Illustration -->
   <div class="login-illustration">
     <lottie-player
       src="assets/lottie/login.json"
@@ -26,85 +26,83 @@
     </lottie-player>
   </div>
 
-  <!-- Login Card -->
+  <!-- Card -->
   <div class="login-card">
-    <h2>🎓 Student Login</h2>
-    <p class="muted">Mark your attendance securely</p>
 
-    <!-- Floating Field -->
-    <div class="field">
-      <input id="roll" required />
-      <label>Roll Number</label>
+    <!-- LOGIN FORM -->
+    <div id="loginForm" class="form active">
+      <h2>🎓 Student Login</h2>
+      <p class="muted">Mark your attendance securely</p>
+
+      <div class="field">
+        <input id="loginRoll" required />
+        <label>Registration Number</label>
+      </div>
+
+      <div class="field">
+        <input id="loginPassword" type="password" required />
+        <label>Password</label>
+        <span class="eye" onclick="togglePwd('loginPassword')">👁</span>
+      </div>
+
+      <button onclick="login()">Login</button>
+
+      <p class="hint">
+        New student?
+        <a onclick="showSignup()">Create account</a>
+      </p>
     </div>
 
-    <div class="field">
-      <input id="password" type="password" required />
-      <label>Password</label>
-      <span class="eye" onclick="togglePwd()">👁</span>
+    <!-- SIGNUP FORM -->
+    <div id="signupForm" class="form">
+      <h2>📝 Create Account</h2>
+      <p class="muted">Register to mark attendance</p>
+
+      <div class="field">
+        <input id="name" required />
+        <label>Full Name</label>
+      </div>
+
+      <div class="field">
+        <input id="roll" required />
+        <label>Registration Number</label>
+      </div>
+
+      <div class="field">
+        <input id="password" type="password" required />
+        <label>Password</label>
+        <span class="eye" onclick="togglePwd('password')">👁</span>
+      </div>
+
+      <button onclick="signup()">Create Account</button>
+
+      <p class="hint">
+        Already have an account?
+        <a onclick="showLogin()">Login</a>
+      </p>
     </div>
 
-    <button onclick="login()">Login</button>
-
-    <p class="hint">Use your registered roll number</p>
-  </div>
-
-</div>
-
-<!-- WhatsApp Floating Button -->
-<div class="whatsapp login-wa" onclick="openWAModal()">
-  <img src="https://upload.wikimedia.org/wikipedia/commons/6/6b/WhatsApp.svg">
-</div>
-
-<!-- WhatsApp Modal -->
-<div id="waModal" class="wa-modal">
-  <div class="wa-box">
-    <h3>WhatsApp Support</h3>
-    <input id="waReg" placeholder="Register Number">
-    <input id="waName" placeholder="Your Name">
-
-    <button onclick="sendWhatsApp('login')">Send</button>
-    <button class="cancel" onclick="closeWAModal()">Cancel</button>
   </div>
 </div>
 
+<!-- Scripts -->
 <script type="module" src="js/auth.js"></script>
+<script type="module" src="js/signup.js"></script>
 
 <script>
-function togglePwd() {
-  const pwd = document.getElementById("password");
-  pwd.type = pwd.type === "password" ? "text" : "password";
+function showSignup() {
+  document.getElementById("loginForm").classList.remove("active");
+  document.getElementById("signupForm").classList.add("active");
 }
 
-function openWAModal() {
-  document.getElementById("waModal").style.display = "flex";
+function showLogin() {
+  document.getElementById("signupForm").classList.remove("active");
+  document.getElementById("loginForm").classList.add("active");
 }
 
-function closeWAModal() {
-  document.getElementById("waModal").style.display = "none";
-}
-
-function sendWhatsApp() {
-  const reg = document.getElementById("waReg").value.trim();
-  const name = document.getElementById("waName").value.trim();
-
-  if (!reg || !name) {
-    alert("Fill all details");
-    return;
-  }
-
-  const message =
-`Hello Support Team 👋
-Reg No: ${reg}
-Name: ${name}
-
-I need help with login.`;
-
-  window.open(
-    "https://wa.me/919337112750?text=" + encodeURIComponent(message),
-    "_blank"
-  );
-
-  closeWAModal();
+function togglePwd(id) {
+  const input = document.getElementById(id);
+  input.type = input.type === "password" ? "text" : "password";
 }
 </script>
 
