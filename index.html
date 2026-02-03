@@ -85,6 +85,24 @@
   </div>
 </div>
 
+<!-- ✅ WhatsApp Floating Button -->
+<div class="whatsapp" onclick="openWAModal()">
+  <img src="https://upload.wikimedia.org/wikipedia/commons/6/6b/WhatsApp.svg">
+</div>
+
+<!-- ✅ WhatsApp Modal -->
+<div id="waModal" class="wa-modal">
+  <div class="wa-box">
+    <h3>WhatsApp Support</h3>
+
+    <input id="waReg" placeholder="Register Number (optional)">
+    <input id="waName" placeholder="Your Name">
+
+    <button onclick="sendWhatsApp()">Send</button>
+    <button class="cancel" onclick="closeWAModal()">Cancel</button>
+  </div>
+</div>
+
 <!-- Scripts -->
 <script type="module" src="js/auth.js"></script>
 <script type="module" src="js/signup.js"></script>
@@ -103,6 +121,39 @@ function showLogin() {
 function togglePwd(id) {
   const input = document.getElementById(id);
   input.type = input.type === "password" ? "text" : "password";
+}
+
+/* WhatsApp logic */
+function openWAModal() {
+  document.getElementById("waModal").style.display = "flex";
+}
+
+function closeWAModal() {
+  document.getElementById("waModal").style.display = "none";
+}
+
+function sendWhatsApp() {
+  const reg = document.getElementById("waReg").value.trim();
+  const name = document.getElementById("waName").value.trim();
+
+  if (!name) {
+    alert("Please enter your name");
+    return;
+  }
+
+  const msg =
+`Hello Support Team 👋
+Name: ${name}
+Reg No: ${reg || "Not provided"}
+
+I need help.`;
+
+  window.open(
+    "https://wa.me/919337112750?text=" + encodeURIComponent(msg),
+    "_blank"
+  );
+
+  closeWAModal();
 }
 </script>
 
