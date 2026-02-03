@@ -1,0 +1,554 @@
+/* =========================
+   GLOBAL RESET
+========================= */
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  font-family: system-ui, -apple-system, BlinkMacSystemFont;
+}
+
+html, body {
+  width: 100%;
+  min-height: 100%;
+  overflow-x: hidden;
+}
+
+/* =========================
+   BACKGROUND – STUDENT
+========================= */
+body {
+  background: linear-gradient(135deg, #5fb3e6, #2f89c5);
+  background-size: 200% 200%;
+  animation: bgMove 10s ease infinite;
+  color: #222;
+}
+
+@keyframes bgMove {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+
+/* =========================
+   HEADER
+========================= */
+header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 14px 18px;
+  color: #fff;
+  backdrop-filter: blur(14px);
+}
+
+/* ===== LOGOUT BUTTON ===== */
+.logout-btn {
+  border: none;
+  padding: 8px 16px;
+  border-radius: 999px;
+  background: linear-gradient(135deg, #ff9800, #ff5722);
+  color: white;
+  font-weight: 600;
+  font-size: 13px;
+  cursor: pointer;
+  box-shadow: 0 6px 16px rgba(0,0,0,0.25);
+  transition: all 0.25s ease;
+}
+
+.logout-btn:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 10px 22px rgba(0,0,0,0.35);
+}
+
+/* =========================
+   CONTAINER
+========================= */
+.container {
+  padding: 16px;
+}
+
+/* =========================
+   GLASS CARDS
+========================= */
+.card,
+.summary-card,
+.welcome-card {
+  border-radius: 22px;
+  padding: 20px;
+  margin-bottom: 18px;
+  background: linear-gradient(
+    135deg,
+    rgba(255,255,255,0.85),
+    rgba(230,245,255,0.75)
+  );
+  backdrop-filter: blur(14px);
+  box-shadow: 0 18px 45px rgba(0,0,0,0.25);
+  animation: fadeUp .45s ease;
+}
+
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(14px); }
+  to { opacity: 1; transform: none; }
+}
+
+/* =========================
+   SUBJECT TITLE (FIXED)
+========================= */
+.card h3 {
+  background: linear-gradient(135deg,#2563eb,#1d4ed8);
+  color: #fff;
+  font-size: 14px;
+  font-weight: 700;
+  padding: 8px 18px;
+  border-radius: 999px;
+  display: inline-block;
+  margin-bottom: 10px;
+}
+
+/* =========================
+   PRESENT / ABSENT BUTTONS
+========================= */
+.btn-row {
+  display: flex;
+  gap: 12px;
+  margin-top: 14px;
+}
+
+.present-btn,
+.absent-btn {
+  flex: 1;
+  border: none;
+  padding: 12px 0;
+  border-radius: 999px;
+  font-size: 14px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.25s ease;
+}
+
+/* Present */
+.present-btn {
+  background: linear-gradient(135deg,#22c55e,#16a34a);
+  color: #fff;
+  box-shadow: 0 6px 16px rgba(34,197,94,.45);
+}
+
+.present-btn:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 10px 22px rgba(34,197,94,.55);
+}
+
+/* Absent */
+.absent-btn {
+  background: linear-gradient(135deg,#ef4444,#dc2626);
+  color: #fff;
+  box-shadow: 0 6px 16px rgba(239,68,68,.45);
+}
+
+.absent-btn:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 10px 22px rgba(239,68,68,.55);
+}
+
+/* =========================
+   TODAY DASHBOARD (CSS ONLY)
+========================= */
+#todayDashboard {
+  margin-top: 18px;
+}
+
+#todayDashboard .dash-row {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 14px;
+  margin-top: 14px;
+}
+
+#todayDashboard .dash-box {
+  text-align: center;
+  padding: 16px 10px;
+  border-radius: 18px;
+  font-weight: 700;
+  font-size: 13px;
+  backdrop-filter: blur(10px);
+  box-shadow: 0 10px 26px rgba(0,0,0,0.18);
+  transition: transform .25s ease;
+}
+
+#todayDashboard .dash-box:hover {
+  transform: translateY(-2px);
+}
+
+#todayDashboard .dash-box span {
+  display: block;
+  font-size: 26px;
+  font-weight: 800;
+  margin-top: 6px;
+}
+
+#todayDashboard .total {
+  background: linear-gradient(135deg,#e0f2fe,#bae6fd);
+  color: #075985;
+}
+
+#todayDashboard .present {
+  background: linear-gradient(135deg,#dcfce7,#86efac);
+  color: #14532d;
+}
+
+#todayDashboard .absent {
+  background: linear-gradient(135deg,#fee2e2,#fca5a5);
+  color: #7f1d1d;
+}
+
+#todayDashboard .notmarked {
+  background: linear-gradient(135deg,#fef9c3,#fde047);
+  color: #713f12;
+}
+
+/* =========================
+   LIVE TIME
+========================= */
+.live-time {
+  font-weight: 600;
+  opacity: .85;
+}
+
+/* =========================
+   WHATSAPP
+========================= */
+.whatsapp {
+  position: fixed;
+  right: 14px;
+  bottom: 14px;
+  width: 44px;
+  height: 44px;
+  background: #25D366;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 999;
+}
+
+/* =========================
+   MOBILE FIX
+========================= */
+@media (max-width: 768px) {
+  .btn-row {
+    flex-direction: column;
+  }
+
+  #todayDashboard .dash-row {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .logout-btn {
+    font-size: 12px;
+    padding: 7px 14px;
+  }
+}
+/* =========================
+   PROGRESS BAR (FINAL)
+========================= */
+
+.progress {
+  width: 100%;
+  height: 12px;
+  background: rgba(0,0,0,0.15);
+  border-radius: 999px;
+  overflow: hidden;
+  margin: 12px 0;
+}
+
+.fill {
+  height: 100%;
+  width: 0;
+  border-radius: 999px;
+  animation: growBar 1s ease forwards;
+}
+
+/* 🔴 Below 65% */
+.fill.red {
+  background: linear-gradient(135deg,#ef4444,#dc2626);
+}
+
+/* 🟡 65–74% */
+.fill.yellow {
+  background: linear-gradient(135deg,#facc15,#eab308);
+}
+
+/* 🟢 75%+ */
+.fill.green {
+  background: linear-gradient(135deg,#22c55e,#16a34a);
+}
+
+@keyframes growBar {
+  from { width: 0; }
+  to { width: var(--target-width); }
+}
+/* =========================
+   INTERACTIVE LOGIN PAGE
+========================= */
+
+.login-wrapper {
+  min-height: 100vh;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  align-items: center;
+  padding: 40px;
+  gap: 40px;
+}
+
+.login-illustration img {
+  width: 100%;
+  max-width: 420px;
+  margin: auto;
+  display: block;
+}
+
+.login-card {
+  max-width: 360px;
+  padding: 30px;
+  border-radius: 26px;
+  background: linear-gradient(
+    135deg,
+    rgba(255,255,255,0.85),
+    rgba(230,245,255,0.7)
+  );
+  backdrop-filter: blur(20px);
+  box-shadow: 0 30px 70px rgba(0,0,0,0.35);
+  animation: popIn .6s ease;
+}
+
+@keyframes popIn {
+  from { transform: scale(.95); opacity: 0; }
+  to { transform: scale(1); opacity: 1; }
+}
+
+.login-card h2 {
+  margin-bottom: 6px;
+}
+
+.login-card .muted {
+  font-size: 13px;
+  opacity: .7;
+  margin-bottom: 18px;
+}
+
+/* Floating input fields */
+.field {
+  position: relative;
+  margin-bottom: 18px;
+}
+
+.field input {
+  width: 100%;
+  padding: 14px 18px;
+  border-radius: 999px;
+  border: none;
+  outline: none;
+  font-size: 14px;
+}
+
+.field label {
+  position: absolute;
+  left: 18px;
+  top: 50%;
+  transform: translateY(-50%);
+  font-size: 13px;
+  color: #555;
+  pointer-events: none;
+  transition: .25s ease;
+}
+
+.field input:focus + label,
+.field input:valid + label {
+  top: -6px;
+  background: white;
+  padding: 0 8px;
+  font-size: 11px;
+  color: #2563eb;
+}
+
+/* Login button */
+.login-card button {
+  width: 100%;
+  padding: 14px;
+  border-radius: 999px;
+  border: none;
+  font-size: 15px;
+  font-weight: 700;
+  background: linear-gradient(135deg,#2563eb,#1d4ed8);
+  color: white;
+  cursor: pointer;
+  transition: all .25s ease;
+}
+
+.login-card button:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 12px 26px rgba(37,99,235,.45);
+}
+
+.login-card button:active {
+  transform: scale(.97);
+}
+
+.login-card .hint {
+  margin-top: 14px;
+  font-size: 12px;
+  opacity: .6;
+  text-align: center;
+}
+
+/* Mobile */
+@media (max-width: 768px) {
+  .login-wrapper {
+    grid-template-columns: 1fr;
+    padding: 20px;
+  }
+
+  .login-illustration {
+    display: none;
+  }
+}
+/* =========================
+   WHATSAPP SUPPORT – MODERN
+========================= */
+
+/* Modal background */
+.wa-modal {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.45);
+  display: none;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+  backdrop-filter: blur(6px);
+}
+
+/* Modal card (same vibe as login-card) */
+.wa-box {
+  width: 100%;
+  max-width: 340px;
+  padding: 26px;
+  border-radius: 26px;
+  background: linear-gradient(
+    135deg,
+    rgba(255,255,255,0.9),
+    rgba(230,245,255,0.75)
+  );
+  backdrop-filter: blur(20px);
+  box-shadow: 0 30px 70px rgba(0,0,0,0.35);
+  animation: waPop .45s ease;
+  text-align: center;
+}
+
+/* Animation */
+@keyframes waPop {
+  from {
+    transform: scale(0.95);
+    opacity: 0;
+  }
+  to {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+/* WhatsApp header */
+.wa-box h3 {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  margin-bottom: 18px;
+  font-size: 18px;
+}
+
+.wa-box h3::before {
+  content: "";
+  width: 26px;
+  height: 26px;
+  background: url("https://upload.wikimedia.org/wikipedia/commons/6/6b/WhatsApp.svg")
+              no-repeat center / contain;
+}
+
+/* Inputs */
+.wa-box input {
+  width: 100%;
+  padding: 14px 18px;
+  margin-bottom: 14px;
+  border-radius: 999px;
+  border: none;
+  outline: none;
+  font-size: 14px;
+  background: rgba(255,255,255,0.95);
+  box-shadow: inset 0 0 0 1px rgba(0,0,0,0.1);
+}
+
+/* Buttons */
+.wa-box button {
+  width: 100%;
+  padding: 14px;
+  border-radius: 999px;
+  border: none;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all .25s ease;
+}
+
+/* Send */
+.wa-box button:not(.cancel) {
+  background: linear-gradient(135deg,#25D366,#1ebe5d);
+  color: white;
+  margin-bottom: 10px;
+}
+
+.wa-box button:not(.cancel):hover {
+  transform: translateY(-1px);
+  box-shadow: 0 12px 26px rgba(37,211,102,0.45);
+}
+
+/* Cancel */
+.wa-box .cancel {
+  background: transparent;
+  color: #444;
+}
+
+.wa-box .cancel:hover {
+  background: rgba(0,0,0,0.05);
+}
+/* =========================
+   LOGIN ↔ SIGNUP ANIMATION
+========================= */
+
+.form {
+  display: none;
+  animation: slideFade .4s ease;
+}
+
+.form.active {
+  display: block;
+}
+
+@keyframes slideFade {
+  from {
+    opacity: 0;
+    transform: translateX(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+.login-card a {
+  cursor: pointer;
+  color: #2563eb;
+  font-weight: 600;
+  text-decoration: none;
+}
+
