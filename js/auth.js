@@ -50,10 +50,13 @@ window.login = async () => {
 
     // 🎯 Redirect
     if (userData.role === "admin") {
-      location.replace("admin.html");
-    } else {
-      location.replace("attendance.html");
-    }
+  sessionStorage.setItem("admin", "true"); // 🔑 REQUIRED
+  location.replace("admin.html");
+} else {
+  sessionStorage.setItem("roll", userData.roll);
+  location.replace("attendance.html");
+}
+
 
   } catch (err) {
     alert("Invalid roll number or password");
