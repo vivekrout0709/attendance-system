@@ -76,10 +76,29 @@ function startClock() {
    HOLIDAY CHECK
 =========================== */
 async function isHoliday() {
-  const snap = await getDoc(doc(db, "holidays", today));
-  return snap.exists();
-}
+  const todayDate = new Date(today);
+  todayDate.setHours(0,0,0,0);
 
+  const snap = await getDocs(collection(db, "holidays"));
+
+  let holiday = false;
+
+  snap.forEach(docSnap => {
+    const data = docSnap.data();
+
+    const start = new Date(docSnap.id);       // start date = doc ID
+    const end = new Date(data.endDate);       // end date from field
+
+    start.setHours(0,0,0,0);
+    end.setHours(0,0,0,0);
+
+    if (todayDate >= start && todayDate <= end) {
+      holiday = true;
+    }
+  });
+
+  return holiday;
+}
 /* ===========================
    SUNDAY MESSAGE
 =========================== */
