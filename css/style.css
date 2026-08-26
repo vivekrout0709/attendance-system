@@ -1,554 +1,1889 @@
-/* =========================
-   GLOBAL RESET
-========================= */
+/* =========================================================
+   PREMIUM ATTENDANCE UI
+   UI ONLY — NO JS/FIREBASE CHANGES
+   ========================================================= */
+
+:root {
+    --bg-dark: #07152f;
+    --bg-mid: #102b63;
+
+    --primary: #4f7cff;
+    --primary-dark: #315bdc;
+    --purple: #7057e8;
+
+    --green: #16b364;
+    --green-light: #dcfce7;
+
+    --red: #e5484d;
+    --red-light: #fee2e2;
+
+    --yellow: #e5a900;
+    --yellow-light: #fef3c7;
+
+    --white: #ffffff;
+    --text: #172033;
+    --muted: #64748b;
+
+    --glass: rgba(255, 255, 255, 0.12);
+    --glass-border: rgba(255, 255, 255, 0.20);
+
+    --shadow: 0 20px 55px rgba(0, 0, 0, 0.20);
+}
+
+
+/* =========================================================
+   RESET
+   ========================================================= */
+
 * {
-  box-sizing: border-box;
-  margin: 0;
-  padding: 0;
-  font-family: system-ui, -apple-system, BlinkMacSystemFont;
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
 }
 
-html, body {
-  width: 100%;
-  min-height: 100%;
-  overflow-x: hidden;
+html {
+    min-height: 100%;
 }
 
-/* =========================
-   BACKGROUND – STUDENT
-========================= */
 body {
-  background: linear-gradient(135deg, #5fb3e6, #2f89c5);
-  background-size: 200% 200%;
-  animation: bgMove 10s ease infinite;
-  color: #222;
+    min-height: 100vh;
+
+    font-family:
+        Inter,
+        "Segoe UI",
+        Roboto,
+        Arial,
+        sans-serif;
+
+    color: var(--text);
+
+    background:
+        radial-gradient(
+            circle at 10% 10%,
+            rgba(79, 124, 255, 0.28),
+            transparent 30%
+        ),
+        radial-gradient(
+            circle at 90% 90%,
+            rgba(112, 87, 232, 0.25),
+            transparent 32%
+        ),
+        linear-gradient(
+            135deg,
+            var(--bg-dark),
+            var(--bg-mid)
+        );
+
+    background-attachment: fixed;
+
+    overflow-x: hidden;
 }
 
-@keyframes bgMove {
-  0% { background-position: 0% 50%; }
-  50% { background-position: 100% 50%; }
-  100% { background-position: 0% 50%; }
+
+/* =========================================================
+   BACKGROUND LIGHT EFFECT
+   ========================================================= */
+
+body::before {
+    content: "";
+
+    position: fixed;
+    inset: 0;
+
+    pointer-events: none;
+
+    background:
+        radial-gradient(
+            circle at 50% -10%,
+            rgba(255,255,255,0.08),
+            transparent 35%
+        );
+
+    z-index: -1;
 }
 
-/* =========================
+
+/* =========================================================
    HEADER
-========================= */
+   ========================================================= */
+
 header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 14px 18px;
-  color: #fff;
-  backdrop-filter: blur(14px);
+    width: calc(100% - 32px);
+
+    margin: 16px auto;
+
+    padding: 16px 20px;
+
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    gap: 15px;
+
+    color: white;
+
+    background: rgba(255,255,255,0.10);
+
+    border: 1px solid var(--glass-border);
+
+    border-radius: 22px;
+
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+
+    box-shadow: var(--shadow);
 }
 
-/* ===== LOGOUT BUTTON ===== */
+header h1 {
+    font-size: 24px;
+    font-weight: 800;
+
+    letter-spacing: -0.5px;
+}
+
+
+/* =========================================================
+   LOGOUT
+   ========================================================= */
+
 .logout-btn {
-  border: none;
-  padding: 8px 16px;
-  border-radius: 999px;
-  background: linear-gradient(135deg, #ff9800, #ff5722);
-  color: white;
-  font-weight: 600;
-  font-size: 13px;
-  cursor: pointer;
-  box-shadow: 0 6px 16px rgba(0,0,0,0.25);
-  transition: all 0.25s ease;
+    border: none;
+
+    padding: 10px 18px;
+
+    border-radius: 999px;
+
+    background:
+        linear-gradient(
+            135deg,
+            #ff9f43,
+            #ef4444
+        );
+
+    color: white;
+
+    font-size: 13px;
+    font-weight: 800;
+
+    cursor: pointer;
+
+    box-shadow:
+        0 8px 22px rgba(239,68,68,0.25);
+
+    transition: 0.25s ease;
 }
 
 .logout-btn:hover {
-  transform: translateY(-1px);
-  box-shadow: 0 10px 22px rgba(0,0,0,0.35);
+    transform: translateY(-2px);
+
+    box-shadow:
+        0 13px 30px rgba(239,68,68,0.35);
 }
 
-/* =========================
-   CONTAINER
-========================= */
+
+/* =========================================================
+   MAIN CONTAINER
+   ========================================================= */
+
 .container {
-  padding: 16px;
+    width: min(1050px, calc(100% - 30px));
+
+    margin: 0 auto;
+
+    padding: 10px 0 25px;
 }
 
-/* =========================
-   GLASS CARDS
-========================= */
-.card,
-.summary-card,
+
+/* =========================================================
+   WELCOME CARD
+   ========================================================= */
+
 .welcome-card {
-  border-radius: 22px;
-  padding: 20px;
-  margin-bottom: 18px;
-  background: linear-gradient(
-    135deg,
-    rgba(255,255,255,0.85),
-    rgba(230,245,255,0.75)
-  );
-  backdrop-filter: blur(14px);
-  box-shadow: 0 18px 45px rgba(0,0,0,0.25);
-  animation: fadeUp .45s ease;
+    position: relative;
+
+    width: min(
+        1050px,
+        calc(100% - 30px)
+    );
+
+    margin: 22px auto;
+
+    padding: 30px;
+
+    overflow: hidden;
+
+    color: white;
+
+    background:
+        linear-gradient(
+            135deg,
+            rgba(79,124,255,0.98),
+            rgba(112,87,232,0.95)
+        );
+
+    border:
+        1px solid rgba(255,255,255,0.22);
+
+    border-radius: 28px;
+
+    box-shadow:
+        0 25px 60px rgba(35,70,170,0.30);
 }
 
-@keyframes fadeUp {
-  from { opacity: 0; transform: translateY(14px); }
-  to { opacity: 1; transform: none; }
+
+/* decorative circles */
+
+.welcome-card::before {
+    content: "";
+
+    position: absolute;
+
+    width: 230px;
+    height: 230px;
+
+    border-radius: 50%;
+
+    right: -80px;
+    top: -100px;
+
+    background:
+        rgba(255,255,255,0.12);
 }
 
-/* =========================
-   SUBJECT TITLE (FIXED)
-========================= */
+.welcome-card::after {
+    content: "";
+
+    position: absolute;
+
+    width: 120px;
+    height: 120px;
+
+    border-radius: 50%;
+
+    right: 90px;
+    bottom: -80px;
+
+    background:
+        rgba(255,255,255,0.08);
+}
+
+.welcome-card h2 {
+    position: relative;
+
+    z-index: 2;
+
+    font-size: 30px;
+
+    font-weight: 850;
+
+    letter-spacing: -0.7px;
+}
+
+.welcome-card .muted {
+    position: relative;
+
+    z-index: 2;
+
+    color: rgba(255,255,255,0.78);
+
+    margin-top: 8px;
+}
+
+.live-time {
+    position: relative;
+
+    z-index: 2;
+
+    margin-top: 7px;
+
+    color: rgba(255,255,255,0.82);
+
+    font-size: 13px;
+
+    font-weight: 600;
+}
+
+
+/* =========================================================
+   CENTER TEXT
+   ========================================================= */
+
+.center {
+    text-align: center;
+}
+
+h2.center {
+    color: white;
+
+    font-size: 22px;
+
+    margin: 25px 0 8px;
+
+    font-weight: 800;
+}
+
+.muted {
+    color: var(--muted);
+}
+
+
+/* =========================================================
+   TODAY ATTENDANCE CARDS
+   These are generated by attendance.js
+   ========================================================= */
+
+#today {
+    display: grid;
+
+    grid-template-columns:
+        repeat(
+            auto-fit,
+            minmax(290px, 1fr)
+        );
+
+    gap: 18px;
+}
+
+
+/* =========================================================
+   GENERAL CARD
+   ========================================================= */
+
+.card {
+    position: relative;
+
+    padding: 22px;
+
+    border-radius: 24px;
+
+    background:
+        rgba(255,255,255,0.96);
+
+    border:
+        1px solid rgba(255,255,255,0.75);
+
+    box-shadow:
+        0 16px 40px rgba(0,0,0,0.16);
+
+    overflow: hidden;
+
+    transition:
+        transform 0.25s ease,
+        box-shadow 0.25s ease;
+}
+
+.card::before {
+    content: "";
+
+    position: absolute;
+
+    left: 0;
+    top: 0;
+
+    width: 5px;
+    height: 100%;
+
+    background:
+        linear-gradient(
+            #4f7cff,
+            #7057e8
+        );
+}
+
+.card:hover {
+    transform: translateY(-5px);
+
+    box-shadow:
+        0 25px 55px rgba(0,0,0,0.20);
+}
+
 .card h3 {
-  background: linear-gradient(135deg,#2563eb,#1d4ed8);
-  color: #fff;
-  font-size: 14px;
-  font-weight: 700;
-  padding: 8px 18px;
-  border-radius: 999px;
-  display: inline-block;
-  margin-bottom: 10px;
+    display: inline-block;
+
+    margin-bottom: 10px;
+
+    padding: 7px 13px;
+
+    border-radius: 999px;
+
+    color: #315bdc;
+
+    background: #edf2ff;
+
+    font-size: 14px;
+
+    font-weight: 850;
 }
 
-/* =========================
+.card .time {
+    margin-bottom: 10px;
+
+    color: var(--muted);
+
+    font-size: 13px;
+
+    font-weight: 650;
+}
+
+
+/* Status text */
+
+.card b {
+    display: block;
+
+    margin-top: 8px;
+
+    font-size: 13px;
+
+    color: #475569;
+}
+
+
+/* =========================================================
    PRESENT / ABSENT BUTTONS
-========================= */
+   ========================================================= */
+
 .btn-row {
-  display: flex;
-  gap: 12px;
-  margin-top: 14px;
+    display: flex;
+
+    gap: 10px;
+
+    margin-top: 18px;
 }
 
 .present-btn,
 .absent-btn {
-  flex: 1;
-  border: none;
-  padding: 12px 0;
-  border-radius: 999px;
-  font-size: 14px;
-  font-weight: 700;
-  cursor: pointer;
-  transition: all 0.25s ease;
+    flex: 1;
+
+    border: none;
+
+    padding: 13px 10px;
+
+    border-radius: 14px;
+
+    color: white;
+
+    font-size: 13px;
+
+    font-weight: 800;
+
+    cursor: pointer;
+
+    transition: 0.25s ease;
 }
 
-/* Present */
 .present-btn {
-  background: linear-gradient(135deg,#22c55e,#16a34a);
-  color: #fff;
-  box-shadow: 0 6px 16px rgba(34,197,94,.45);
+    background:
+        linear-gradient(
+            135deg,
+            #34d399,
+            #16a34a
+        );
+
+    box-shadow:
+        0 8px 20px rgba(22,163,74,0.22);
 }
 
-.present-btn:hover {
-  transform: translateY(-1px);
-  box-shadow: 0 10px 22px rgba(34,197,94,.55);
-}
-
-/* Absent */
 .absent-btn {
-  background: linear-gradient(135deg,#ef4444,#dc2626);
-  color: #fff;
-  box-shadow: 0 6px 16px rgba(239,68,68,.45);
+    background:
+        linear-gradient(
+            135deg,
+            #fb7185,
+            #dc2626
+        );
+
+    box-shadow:
+        0 8px 20px rgba(220,38,38,0.22);
 }
 
+.present-btn:hover,
 .absent-btn:hover {
-  transform: translateY(-1px);
-  box-shadow: 0 10px 22px rgba(239,68,68,.55);
+    transform: translateY(-2px);
+
+    filter: brightness(1.04);
 }
 
-/* =========================
-   TODAY DASHBOARD (CSS ONLY)
-========================= */
-#todayDashboard {
-  margin-top: 18px;
+.present-btn:active,
+.absent-btn:active {
+    transform: scale(0.98);
 }
 
-#todayDashboard .dash-row {
-  display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  gap: 14px;
-  margin-top: 14px;
+
+/* =========================================================
+   SUBJECT SUMMARY
+   ========================================================= */
+
+#summary {
+    display: grid;
+
+    grid-template-columns:
+        repeat(
+            auto-fit,
+            minmax(280px, 1fr)
+        );
+
+    gap: 18px;
 }
 
-#todayDashboard .dash-box {
-  text-align: center;
-  padding: 16px 10px;
-  border-radius: 18px;
-  font-weight: 700;
-  font-size: 13px;
-  backdrop-filter: blur(10px);
-  box-shadow: 0 10px 26px rgba(0,0,0,0.18);
-  transition: transform .25s ease;
+
+/* =========================================================
+   SUMMARY CARD
+   ========================================================= */
+
+.summary-card {
+    padding: 22px;
+
+    border-radius: 24px;
+
+    background:
+        rgba(255,255,255,0.96);
+
+    border:
+        1px solid rgba(255,255,255,0.75);
+
+    box-shadow:
+        0 16px 40px rgba(0,0,0,0.15);
+
+    transition: 0.25s ease;
 }
 
-#todayDashboard .dash-box:hover {
-  transform: translateY(-2px);
+.summary-card:hover {
+    transform: translateY(-4px);
+
+    box-shadow:
+        0 24px 50px rgba(0,0,0,0.20);
 }
 
-#todayDashboard .dash-box span {
-  display: block;
-  font-size: 26px;
-  font-weight: 800;
-  margin-top: 6px;
+.summary-card h3 {
+    color: var(--text);
+
+    font-size: 18px;
+
+    font-weight: 850;
+
+    margin-bottom: 6px;
 }
 
-#todayDashboard .total {
-  background: linear-gradient(135deg,#e0f2fe,#bae6fd);
-  color: #075985;
+.summary-card p {
+    color: var(--muted);
+
+    font-size: 13px;
+
+    margin-bottom: 12px;
 }
 
-#todayDashboard .present {
-  background: linear-gradient(135deg,#dcfce7,#86efac);
-  color: #14532d;
-}
 
-#todayDashboard .absent {
-  background: linear-gradient(135deg,#fee2e2,#fca5a5);
-  color: #7f1d1d;
-}
-
-#todayDashboard .notmarked {
-  background: linear-gradient(135deg,#fef9c3,#fde047);
-  color: #713f12;
-}
-
-/* =========================
-   LIVE TIME
-========================= */
-.live-time {
-  font-weight: 600;
-  opacity: .85;
-}
-
-/* =========================
-   WHATSAPP
-========================= */
-.whatsapp {
-  position: fixed;
-  right: 14px;
-  bottom: 14px;
-  width: 44px;
-  height: 44px;
-  background: #25D366;
-  border-radius: 50%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  z-index: 999;
-}
-
-/* =========================
-   MOBILE FIX
-========================= */
-@media (max-width: 768px) {
-  .btn-row {
-    flex-direction: column;
-  }
-
-  #todayDashboard .dash-row {
-    grid-template-columns: repeat(2, 1fr);
-  }
-
-  .logout-btn {
-    font-size: 12px;
-    padding: 7px 14px;
-  }
-}
-/* =========================
-   PROGRESS BAR (FINAL)
-========================= */
+/* =========================================================
+   PROGRESS BAR
+   ========================================================= */
 
 .progress {
-  width: 100%;
-  height: 12px;
-  background: rgba(0,0,0,0.15);
-  border-radius: 999px;
-  overflow: hidden;
-  margin: 12px 0;
+    width: 100%;
+
+    height: 12px;
+
+    margin: 12px 0;
+
+    overflow: hidden;
+
+    border-radius: 999px;
+
+    background:
+        #e8edf5;
 }
 
 .fill {
-  height: 100%;
-  width: 0;
-  border-radius: 999px;
-  animation: growBar 1s ease forwards;
+    height: 100%;
+
+    width: 0;
+
+    border-radius: inherit;
+
+    animation:
+        progressGrow 0.9s ease forwards;
 }
 
-/* 🔴 Below 65% */
-.fill.red {
-  background: linear-gradient(135deg,#ef4444,#dc2626);
-}
-
-/* 🟡 65–74% */
-.fill.yellow {
-  background: linear-gradient(135deg,#facc15,#eab308);
-}
-
-/* 🟢 75%+ */
 .fill.green {
-  background: linear-gradient(135deg,#22c55e,#16a34a);
+    background:
+        linear-gradient(
+            90deg,
+            #4ade80,
+            #16a34a
+        );
 }
 
-@keyframes growBar {
-  from { width: 0; }
-  to { width: var(--target-width); }
+.fill.yellow {
+    background:
+        linear-gradient(
+            90deg,
+            #fde047,
+            #eab308
+        );
 }
-/* =========================
-   INTERACTIVE LOGIN PAGE
-========================= */
+
+.fill.red {
+    background:
+        linear-gradient(
+            90deg,
+            #fb7185,
+            #dc2626
+        );
+}
+
+@keyframes progressGrow {
+    from {
+        width: 0;
+    }
+
+    to {
+        width: var(--target-width);
+    }
+}
+
+
+/* =========================================================
+   ATTENDANCE PERCENTAGE
+   ========================================================= */
+
+.percent {
+    display: block;
+
+    font-size: 28px;
+
+    font-weight: 900;
+
+    color: #315bdc;
+
+    text-align: right;
+}
+
+
+/* =========================================================
+   SUNDAY MESSAGE
+   ========================================================= */
+
+#sundayMsg {
+    width: fit-content;
+
+    margin: 12px auto;
+
+    padding: 10px 16px;
+
+    color: #854d0e;
+
+    background:
+        rgba(254,243,199,0.95);
+
+    border:
+        1px solid #fde68a;
+
+    border-radius: 999px;
+
+    font-size: 13px;
+
+    font-weight: 700;
+}
+
+
+/* =========================================================
+   WHATSAPP BUTTON
+   ========================================================= */
+
+.whatsapp {
+    position: fixed;
+
+    right: 22px;
+    bottom: 22px;
+
+    width: 58px;
+    height: 58px;
+
+    display: flex;
+
+    align-items: center;
+    justify-content: center;
+
+    border-radius: 50%;
+
+    background:
+        linear-gradient(
+            135deg,
+            #2eea78,
+            #16b95b
+        );
+
+    border:
+        3px solid rgba(255,255,255,0.9);
+
+    cursor: pointer;
+
+    z-index: 999;
+
+    box-shadow:
+        0 12px 30px rgba(0,0,0,0.25);
+
+    transition: 0.25s ease;
+
+    animation:
+        whatsappPulse 2.3s infinite;
+}
+
+.whatsapp img {
+    width: 30px;
+    height: 30px;
+}
+
+.whatsapp:hover {
+    transform:
+        scale(1.08)
+        translateY(-3px);
+}
+
+@keyframes whatsappPulse {
+
+    0%,
+    100% {
+        box-shadow:
+            0 12px 30px rgba(0,0,0,0.25),
+            0 0 0 0 rgba(37,211,102,0.35);
+    }
+
+    50% {
+        box-shadow:
+            0 12px 30px rgba(0,0,0,0.25),
+            0 0 0 10px rgba(37,211,102,0);
+    }
+}
+
+
+/* =========================================================
+   WHATSAPP MODAL
+   ========================================================= */
+
+.wa-modal {
+    position: fixed;
+
+    inset: 0;
+
+    display: none;
+
+    align-items: center;
+    justify-content: center;
+
+    padding: 20px;
+
+    background:
+        rgba(2,8,23,0.65);
+
+    backdrop-filter:
+        blur(10px);
+
+    z-index: 1000;
+}
+
+.wa-box {
+    width: min(390px,100%);
+
+    padding: 30px;
+
+    text-align: center;
+
+    border-radius: 28px;
+
+    background:
+        rgba(255,255,255,0.98);
+
+    box-shadow:
+        0 30px 80px rgba(0,0,0,0.40);
+
+    animation:
+        modalIn 0.3s ease;
+}
+
+.wa-box h3 {
+    margin-bottom: 20px;
+
+    color: var(--text);
+
+    font-size: 21px;
+
+    font-weight: 850;
+}
+
+.wa-box input {
+    width: 100%;
+
+    margin-bottom: 12px;
+
+    padding: 14px 16px;
+
+    border:
+        1px solid #dbe3ef;
+
+    border-radius: 14px;
+
+    outline: none;
+
+    background: #f8fafc;
+
+    font-size: 14px;
+
+    transition: 0.2s;
+}
+
+.wa-box input:focus {
+    background: white;
+
+    border-color: #25d366;
+
+    box-shadow:
+        0 0 0 4px rgba(37,211,102,0.10);
+}
+
+.wa-box button {
+    width: 100%;
+
+    border: none;
+
+    padding: 14px;
+
+    border-radius: 14px;
+
+    font-weight: 800;
+
+    cursor: pointer;
+
+    transition: 0.2s;
+}
+
+.wa-box button:not(.cancel) {
+    margin-bottom: 9px;
+
+    color: white;
+
+    background:
+        linear-gradient(
+            135deg,
+            #25d366,
+            #16b95b
+        );
+}
+
+.wa-box .cancel {
+    color: #475569;
+
+    background: #eef2f7;
+}
+
+.wa-box button:hover {
+    transform: translateY(-2px);
+}
+
+@keyframes modalIn {
+
+    from {
+        opacity: 0;
+        transform: scale(0.94);
+    }
+
+    to {
+        opacity: 1;
+        transform: scale(1);
+    }
+}
+
+
+/* =========================================================
+   LOGIN / SIGNUP
+   ========================================================= */
 
 .login-wrapper {
-  min-height: 100vh;
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  align-items: center;
-  padding: 40px;
-  gap: 40px;
+    min-height: 100vh;
+
+    width: min(1150px,100%);
+
+    margin: auto;
+
+    padding: 40px 25px;
+
+    display: grid;
+
+    grid-template-columns:
+        minmax(0,1fr)
+        minmax(350px,450px);
+
+    align-items: center;
+
+    gap: 65px;
 }
 
-.login-illustration img {
-  width: 100%;
-  max-width: 420px;
-  margin: auto;
-  display: block;
+.login-illustration {
+    display: flex;
+
+    align-items: center;
+    justify-content: center;
+
+    position: relative;
+}
+
+.login-illustration::before {
+    content: "";
+
+    position: absolute;
+
+    width: 420px;
+    height: 420px;
+
+    border-radius: 50%;
+
+    background:
+        radial-gradient(
+            circle,
+            rgba(79,124,255,0.30),
+            transparent 68%
+        );
+}
+
+.login-illustration lottie-player {
+    width: min(100%,500px);
+
+    position: relative;
+
+    filter:
+        drop-shadow(
+            0 25px 40px rgba(0,0,0,0.22)
+        );
 }
 
 .login-card {
-  max-width: 360px;
-  padding: 30px;
-  border-radius: 26px;
-  background: linear-gradient(
-    135deg,
-    rgba(255,255,255,0.85),
-    rgba(230,245,255,0.7)
-  );
-  backdrop-filter: blur(20px);
-  box-shadow: 0 30px 70px rgba(0,0,0,0.35);
-  animation: popIn .6s ease;
-}
+    width: 100%;
 
-@keyframes popIn {
-  from { transform: scale(.95); opacity: 0; }
-  to { transform: scale(1); opacity: 1; }
+    padding: 38px;
+
+    border-radius: 30px;
+
+    background:
+        rgba(255,255,255,0.97);
+
+    color: var(--text);
+
+    border:
+        1px solid rgba(255,255,255,0.85);
+
+    box-shadow:
+        0 30px 80px rgba(0,0,0,0.30);
+
+    backdrop-filter: blur(20px);
+
+    animation:
+        loginIn 0.55s ease;
 }
 
 .login-card h2 {
-  margin-bottom: 6px;
+    font-size: 27px;
+
+    font-weight: 900;
+
+    letter-spacing: -0.7px;
+
+    margin-bottom: 7px;
 }
 
 .login-card .muted {
-  font-size: 13px;
-  opacity: .7;
-  margin-bottom: 18px;
+    color: var(--muted);
+
+    font-size: 13px;
+
+    margin-bottom: 25px;
 }
 
-/* Floating input fields */
+
+/* Inputs */
+
 .field {
-  position: relative;
-  margin-bottom: 18px;
+    position: relative;
+
+    margin-bottom: 19px;
 }
 
 .field input {
-  width: 100%;
-  padding: 14px 18px;
-  border-radius: 999px;
-  border: none;
-  outline: none;
-  font-size: 14px;
+    width: 100%;
+
+    padding: 16px 18px;
+
+    border:
+        1px solid #dbe3ef;
+
+    border-radius: 15px;
+
+    outline: none;
+
+    color: var(--text);
+
+    background:
+        #f8fafc;
+
+    font-size: 14px;
+
+    transition: 0.25s ease;
+}
+
+.field input:focus {
+    background: white;
+
+    border-color: var(--primary);
+
+    box-shadow:
+        0 0 0 4px rgba(79,124,255,0.12);
 }
 
 .field label {
-  position: absolute;
-  left: 18px;
-  top: 50%;
-  transform: translateY(-50%);
-  font-size: 13px;
-  color: #555;
-  pointer-events: none;
-  transition: .25s ease;
+    position: absolute;
+
+    left: 16px;
+    top: 50%;
+
+    transform:
+        translateY(-50%);
+
+    color: #64748b;
+
+    font-size: 13px;
+
+    pointer-events: none;
+
+    transition: 0.2s;
 }
 
 .field input:focus + label,
 .field input:valid + label {
-  top: -6px;
-  background: white;
-  padding: 0 8px;
-  font-size: 11px;
-  color: #2563eb;
+    top: 0;
+
+    padding: 0 7px;
+
+    background: white;
+
+    color: var(--primary);
+
+    font-size: 11px;
+
+    font-weight: 750;
 }
 
+
+/* Password eye */
+
+.eye {
+    position: absolute;
+
+    right: 15px;
+    top: 50%;
+
+    transform:
+        translateY(-50%);
+
+    cursor: pointer;
+
+    opacity: 0.60;
+
+    transition: 0.2s;
+}
+
+.eye:hover {
+    opacity: 1;
+
+    transform:
+        translateY(-50%)
+        scale(1.1);
+}
+
+
 /* Login button */
+
 .login-card button {
-  width: 100%;
-  padding: 14px;
-  border-radius: 999px;
-  border: none;
-  font-size: 15px;
-  font-weight: 700;
-  background: linear-gradient(135deg,#2563eb,#1d4ed8);
-  color: white;
-  cursor: pointer;
-  transition: all .25s ease;
+    width: 100%;
+
+    padding: 15px;
+
+    border: none;
+
+    border-radius: 15px;
+
+    color: white;
+
+    background:
+        linear-gradient(
+            135deg,
+            var(--primary),
+            var(--purple)
+        );
+
+    font-size: 15px;
+
+    font-weight: 850;
+
+    cursor: pointer;
+
+    box-shadow:
+        0 12px 28px rgba(79,124,255,0.30);
+
+    transition: 0.25s ease;
 }
 
 .login-card button:hover {
-  transform: translateY(-1px);
-  box-shadow: 0 12px 26px rgba(37,99,235,.45);
+    transform: translateY(-2px);
+
+    box-shadow:
+        0 18px 35px rgba(79,124,255,0.40);
 }
 
 .login-card button:active {
-  transform: scale(.97);
+    transform: scale(0.98);
 }
 
 .login-card .hint {
-  margin-top: 14px;
-  font-size: 12px;
-  opacity: .6;
-  text-align: center;
-}
+    margin-top: 18px;
 
-/* Mobile */
-@media (max-width: 768px) {
-  .login-wrapper {
-    grid-template-columns: 1fr;
-    padding: 20px;
-  }
+    text-align: center;
 
-  .login-illustration {
-    display: none;
-  }
-}
-/* =========================
-   WHATSAPP SUPPORT – MODERN
-========================= */
+    color: var(--muted);
 
-/* Modal background */
-.wa-modal {
-  position: fixed;
-  inset: 0;
-  background: rgba(0,0,0,0.45);
-  display: none;
-  align-items: center;
-  justify-content: center;
-  z-index: 1000;
-  backdrop-filter: blur(6px);
-}
-
-/* Modal card (same vibe as login-card) */
-.wa-box {
-  width: 100%;
-  max-width: 340px;
-  padding: 26px;
-  border-radius: 26px;
-  background: linear-gradient(
-    135deg,
-    rgba(255,255,255,0.9),
-    rgba(230,245,255,0.75)
-  );
-  backdrop-filter: blur(20px);
-  box-shadow: 0 30px 70px rgba(0,0,0,0.35);
-  animation: waPop .45s ease;
-  text-align: center;
-}
-
-/* Animation */
-@keyframes waPop {
-  from {
-    transform: scale(0.95);
-    opacity: 0;
-  }
-  to {
-    transform: scale(1);
-    opacity: 1;
-  }
-}
-
-/* WhatsApp header */
-.wa-box h3 {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 10px;
-  margin-bottom: 18px;
-  font-size: 18px;
-}
-
-.wa-box h3::before {
-  content: "";
-  width: 26px;
-  height: 26px;
-  background: url("https://upload.wikimedia.org/wikipedia/commons/6/6b/WhatsApp.svg")
-              no-repeat center / contain;
-}
-
-/* Inputs */
-.wa-box input {
-  width: 100%;
-  padding: 14px 18px;
-  margin-bottom: 14px;
-  border-radius: 999px;
-  border: none;
-  outline: none;
-  font-size: 14px;
-  background: rgba(255,255,255,0.95);
-  box-shadow: inset 0 0 0 1px rgba(0,0,0,0.1);
-}
-
-/* Buttons */
-.wa-box button {
-  width: 100%;
-  padding: 14px;
-  border-radius: 999px;
-  border: none;
-  font-weight: 700;
-  cursor: pointer;
-  transition: all .25s ease;
-}
-
-/* Send */
-.wa-box button:not(.cancel) {
-  background: linear-gradient(135deg,#25D366,#1ebe5d);
-  color: white;
-  margin-bottom: 10px;
-}
-
-.wa-box button:not(.cancel):hover {
-  transform: translateY(-1px);
-  box-shadow: 0 12px 26px rgba(37,211,102,0.45);
-}
-
-/* Cancel */
-.wa-box .cancel {
-  background: transparent;
-  color: #444;
-}
-
-.wa-box .cancel:hover {
-  background: rgba(0,0,0,0.05);
-}
-/* =========================
-   LOGIN ↔ SIGNUP ANIMATION
-========================= */
-
-.form {
-  display: none;
-  animation: slideFade .4s ease;
-}
-
-.form.active {
-  display: block;
-}
-
-@keyframes slideFade {
-  from {
-    opacity: 0;
-    transform: translateX(20px);
-  }
-  to {
-    opacity: 1;
-    transform: translateX(0);
-  }
+    font-size: 12px;
 }
 
 .login-card a {
-  cursor: pointer;
-  color: #2563eb;
-  font-weight: 600;
-  text-decoration: none;
+    color: #315bdc;
+
+    font-weight: 750;
+
+    text-decoration: none;
+
+    cursor: pointer;
 }
 
+.login-card a:hover {
+    text-decoration: underline;
+}
+
+
+/* Login animations */
+
+@keyframes loginIn {
+
+    from {
+        opacity: 0;
+        transform:
+            translateY(15px)
+            scale(0.97);
+    }
+
+    to {
+        opacity: 1;
+        transform:
+            translateY(0)
+            scale(1);
+    }
+}
+
+
+/* =========================================================
+   ADMIN
+   ========================================================= */
+
+body.admin .container {
+    width: min(850px,calc(100% - 30px));
+}
+
+body.admin .card {
+    padding: 28px;
+}
+
+body.admin .card h3 {
+    margin-bottom: 22px;
+}
+
+
+/* Radio buttons */
+
+body.admin label {
+    display: inline-flex;
+
+    align-items: center;
+
+    gap: 8px;
+
+    color: #475569;
+
+    font-size: 14px;
+
+    font-weight: 650;
+
+    cursor: pointer;
+}
+
+body.admin input[type="radio"] {
+    width: 17px;
+    height: 17px;
+
+    accent-color: var(--primary);
+}
+
+
+/* Admin inputs */
+
+body.admin .card input[type="date"],
+body.admin .card input[type="text"] {
+    width: 100%;
+
+    padding: 14px 16px;
+
+    margin: 6px 0;
+
+    border:
+        1px solid #dbe3ef;
+
+    border-radius: 14px;
+
+    outline: none;
+
+    color: var(--text);
+
+    background: #f8fafc;
+
+    font-size: 14px;
+
+    transition: 0.2s;
+}
+
+body.admin .card input:focus {
+    background: white;
+
+    border-color: var(--primary);
+
+    box-shadow:
+        0 0 0 4px rgba(79,124,255,0.11);
+}
+
+
+/* Admin buttons */
+
+body.admin .save-btn,
+body.admin .delete-btn {
+    border: none;
+
+    padding: 13px 18px;
+
+    margin-top: 12px;
+
+    border-radius: 14px;
+
+    color: white;
+
+    font-weight: 800;
+
+    cursor: pointer;
+
+    transition: 0.25s;
+}
+
+body.admin .save-btn {
+    background:
+        linear-gradient(
+            135deg,
+            #34d399,
+            #16a34a
+        );
+
+    box-shadow:
+        0 9px 22px rgba(22,163,74,0.22);
+}
+
+body.admin .delete-btn {
+    background:
+        linear-gradient(
+            135deg,
+            #fb7185,
+            #dc2626
+        );
+
+    box-shadow:
+        0 9px 22px rgba(220,38,38,0.20);
+}
+
+body.admin .save-btn:hover,
+body.admin .delete-btn:hover {
+    transform: translateY(-2px);
+}
+
+
+/* =========================================================
+   MOBILE
+   ========================================================= */
+
+@media (max-width: 900px) {
+
+    .login-wrapper {
+        grid-template-columns: 1fr;
+
+        max-width: 500px;
+
+        padding: 25px 18px;
+    }
+
+    .login-illustration {
+        display: none;
+    }
+
+    .login-card {
+        max-width: none;
+    }
+}
+
+
+@media (max-width: 700px) {
+
+    header {
+        width: calc(100% - 20px);
+
+        margin: 10px;
+
+        padding: 13px 15px;
+
+        border-radius: 17px;
+    }
+
+    header h1 {
+        font-size: 17px;
+    }
+
+    .logout-btn {
+        padding: 8px 13px;
+
+        font-size: 12px;
+    }
+
+    .welcome-card {
+        width: calc(100% - 20px);
+
+        margin: 15px 10px;
+
+        padding: 23px;
+
+        border-radius: 23px;
+    }
+
+    .welcome-card h2 {
+        font-size: 23px;
+    }
+
+    .container {
+        width: calc(100% - 20px);
+
+        padding: 8px 0 20px;
+    }
+
+    #today,
+    #summary {
+        grid-template-columns: 1fr;
+
+        gap: 13px;
+    }
+
+    .card,
+    .summary-card {
+        padding: 19px;
+
+        border-radius: 21px;
+    }
+
+    .btn-row {
+        flex-direction: column;
+    }
+
+    .whatsapp {
+        width: 53px;
+        height: 53px;
+
+        right: 15px;
+        bottom: 15px;
+    }
+
+    .login-wrapper {
+        padding: 18px 13px;
+    }
+
+    .login-card {
+        padding: 28px 20px;
+
+        border-radius: 25px;
+    }
+
+    .login-card h2 {
+        font-size: 23px;
+    }
+
+    body.admin .card input[type="date"],
+    body.admin .card input[type="text"] {
+        width: 100%;
+    }
+
+    body.admin .save-btn,
+    body.admin .delete-btn {
+        width: 100%;
+    }
+}
+
+
+@media (max-width: 380px) {
+
+    .welcome-card h2 {
+        font-size: 21px;
+    }
+
+    .login-card {
+        padding: 24px 17px;
+    }
+
+    .card,
+    .summary-card {
+        padding: 17px;
+    }
+}
+
+/* =========================================================
+   MOBILE-FIRST UI UPGRADE
+   Keeps existing HTML / JS / Firebase untouched
+   ========================================================= */
+
+/* IMPORTANT: only the active login/signup form is visible */
+.form {
+    display: none;
+}
+
+.form.active {
+    display: block;
+}
+
+/* Better touch behavior */
+button,
+a,
+input,
+.whatsapp {
+    -webkit-tap-highlight-color: transparent;
+}
+
+button,
+a,
+.whatsapp {
+    touch-action: manipulation;
+}
+
+/* Never let form controls overflow the phone */
+.login-card,
+.login-card * {
+    max-width: 100%;
+}
+
+/* =========================================================
+   PHONE LOGIN / SIGNUP
+   ========================================================= */
+@media (max-width: 700px) {
+
+    html,
+    body {
+        width: 100%;
+        min-width: 0;
+        overflow-x: hidden;
+    }
+
+    body.bg {
+        min-height: 100dvh;
+        background:
+            radial-gradient(circle at 90% 0%, rgba(112,87,232,.30), transparent 34%),
+            radial-gradient(circle at 0% 100%, rgba(79,124,255,.28), transparent 36%),
+            linear-gradient(145deg, #07152f 0%, #102b63 100%);
+    }
+
+    /* compact top branding made entirely with CSS */
+    .login-wrapper {
+        width: 100%;
+        min-height: 100dvh;
+        padding: 18px 14px calc(28px + env(safe-area-inset-bottom));
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        gap: 14px;
+    }
+
+    .login-wrapper::before {
+        content: "ATTENDANCE  •  STUDENT PORTAL";
+        display: block;
+        color: rgba(255,255,255,.70);
+        font-size: 10px;
+        font-weight: 850;
+        letter-spacing: 1.7px;
+        text-align: center;
+        margin-bottom: 1px;
+    }
+
+    /* Do not waste phone space on the desktop illustration */
+    .login-illustration {
+        display: none !important;
+    }
+
+    .login-card {
+        width: 100%;
+        max-width: 430px;
+        padding: 25px 18px 21px;
+        border-radius: 25px;
+        background: rgba(255,255,255,.98);
+        box-shadow:
+            0 25px 70px rgba(0,0,0,.30),
+            0 0 0 1px rgba(255,255,255,.30);
+    }
+
+    .login-card::before {
+        width: 135px;
+        height: 135px;
+        right: -70px;
+        top: -70px;
+    }
+
+    .login-card h2 {
+        position: relative;
+        z-index: 2;
+        font-size: 23px;
+        line-height: 1.2;
+        letter-spacing: -.5px;
+    }
+
+    .login-card .muted {
+        margin-top: 6px;
+        margin-bottom: 21px;
+        font-size: 12px;
+        line-height: 1.45;
+    }
+
+    .field {
+        margin-bottom: 13px;
+    }
+
+    .field input {
+        width: 100%;
+        height: 54px;
+        padding: 17px 43px 8px 15px;
+        border-radius: 14px;
+        font-size: 14px;
+        background: #f7f9fc;
+    }
+
+    .field label {
+        left: 15px;
+        font-size: 12px;
+    }
+
+    .field input:focus + label,
+    .field input:valid + label {
+        font-size: 10px;
+        padding: 0 6px;
+    }
+
+    .eye {
+        right: 14px;
+        font-size: 15px;
+    }
+
+    .login-card button {
+        width: 100%;
+        min-height: 53px;
+        padding: 13px 15px;
+        margin-top: 3px;
+        border-radius: 14px;
+        font-size: 14px;
+        box-shadow: 0 10px 24px rgba(79,124,255,.28);
+    }
+
+    .login-card .hint {
+        margin-top: 15px;
+        font-size: 11px;
+        line-height: 1.5;
+    }
+
+    .login-card a {
+        display: inline-block;
+        padding: 3px 1px;
+    }
+
+    /* Asset-independent WhatsApp button */
+    .whatsapp {
+        width: 48px;
+        height: 48px;
+        right: 14px;
+        bottom: calc(14px + env(safe-area-inset-bottom));
+        border-width: 2px;
+    }
+
+    .whatsapp img {
+        display: none;
+    }
+
+    .whatsapp::before {
+        content: "✆";
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 100%;
+        height: 100%;
+        color: white;
+        font-size: 25px;
+        font-weight: 900;
+    }
+
+    /* Modal fits narrow phones */
+    .wa-modal {
+        padding: 14px;
+    }
+
+    .wa-box {
+        width: 100%;
+        max-width: 390px;
+        padding: 24px 18px;
+        border-radius: 22px;
+    }
+
+    .wa-box input {
+        min-height: 50px;
+        font-size: 14px;
+    }
+
+    .wa-box button {
+        min-height: 50px;
+    }
+}
+
+/* Extra-small phones: 320–380px */
+@media (max-width: 380px) {
+
+    .login-wrapper {
+        padding-left: 10px;
+        padding-right: 10px;
+        padding-top: 13px;
+    }
+
+    .login-card {
+        padding: 22px 15px 18px;
+        border-radius: 21px;
+    }
+
+    .login-card h2 {
+        font-size: 21px;
+    }
+
+    .login-card .muted {
+        margin-bottom: 17px;
+        font-size: 11px;
+    }
+
+    .field {
+        margin-bottom: 11px;
+    }
+
+    .field input {
+        height: 51px;
+        font-size: 13px;
+    }
+
+    .login-card button {
+        min-height: 50px;
+    }
+}
+
+/* =========================================================
+   MOBILE ATTENDANCE DASHBOARD
+   ========================================================= */
+@media (max-width: 700px) {
+
+    body.bg:has(#today) {
+        background:
+            radial-gradient(circle at 100% 0%, rgba(112,87,232,.27), transparent 30%),
+            linear-gradient(155deg, #07152f, #102b63);
+    }
+
+    header {
+        width: calc(100% - 20px);
+        margin: 10px;
+        padding: 12px 13px;
+        min-height: 52px;
+        border-radius: 17px;
+        gap: 10px;
+    }
+
+    header h1 {
+        min-width: 0;
+        font-size: 16px;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+
+    .logout-btn {
+        flex: 0 0 auto;
+        min-height: 38px;
+        padding: 8px 13px;
+        font-size: 11px;
+    }
+
+    .welcome-card {
+        width: calc(100% - 20px);
+        margin: 12px 10px 15px;
+        padding: 20px 18px;
+        border-radius: 22px;
+    }
+
+    .welcome-card h2 {
+        font-size: 22px;
+        line-height: 1.15;
+    }
+
+    .live-time {
+        margin-top: 7px;
+        font-size: 11px;
+        line-height: 1.45;
+    }
+
+    .container {
+        width: calc(100% - 20px);
+        margin-left: 10px;
+        margin-right: 10px;
+        padding: 4px 0 18px;
+    }
+
+    h2.center {
+        margin: 18px 10px 9px;
+        font-size: 18px;
+        text-align: left;
+    }
+
+    #today,
+    #summary {
+        display: grid;
+        grid-template-columns: 1fr;
+        gap: 11px;
+    }
+
+    .card,
+    .summary-card {
+        width: 100%;
+        padding: 17px;
+        border-radius: 19px;
+        box-shadow: 0 10px 28px rgba(0,0,0,.14);
+    }
+
+    .card h3 {
+        margin-bottom: 7px;
+        font-size: 13px;
+    }
+
+    .card .time {
+        margin-bottom: 8px;
+        font-size: 11px;
+    }
+
+    .card b {
+        font-size: 12px;
+    }
+
+    .btn-row {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 8px;
+        margin-top: 14px;
+    }
+
+    .present-btn,
+    .absent-btn {
+        min-height: 47px;
+        padding: 10px 7px;
+        border-radius: 12px;
+        font-size: 12px;
+    }
+
+    .summary-card h3 {
+        font-size: 16px;
+    }
+
+    .summary-card p {
+        font-size: 11px;
+    }
+
+    .progress {
+        height: 9px;
+        margin: 10px 0;
+    }
+
+    .percent {
+        font-size: 23px;
+    }
+
+    #sundayMsg {
+        max-width: calc(100% - 30px);
+        font-size: 11px;
+        line-height: 1.4;
+        text-align: center;
+    }
+}
+
+/* =========================================================
+   MOBILE ADMIN
+   ========================================================= */
+@media (max-width: 700px) {
+
+    body.admin .container {
+        width: calc(100% - 20px);
+    }
+
+    body.admin .card {
+        padding: 19px;
+        border-radius: 20px;
+    }
+
+    body.admin .card h3 {
+        margin-bottom: 17px;
+        font-size: 17px;
+    }
+
+    body.admin label {
+        font-size: 12px;
+    }
+
+    body.admin .card input[type="date"],
+    body.admin .card input[type="text"] {
+        min-height: 50px;
+        padding: 12px 13px;
+        border-radius: 13px;
+        font-size: 13px;
+    }
+
+    body.admin .save-btn,
+    body.admin .delete-btn {
+        width: 100%;
+        min-height: 49px;
+        margin-top: 9px;
+        border-radius: 13px;
+        font-size: 13px;
+    }
+}
+
+/* =========================================================
+   REDUCE MOTION FOR USERS WHO REQUEST IT
+   ========================================================= */
+@media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+        animation-duration: .01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: .01ms !important;
+    }
+}
