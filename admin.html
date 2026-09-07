@@ -1,54 +1,45 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-  <title>Admin Dashboard</title>
-  <link rel="stylesheet" href="css/style.css">
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Admin Dashboard</title><link rel="stylesheet" href="css/style.css">
 </head>
-<body class="admin">
+<body class="admin bg">
+<header><div><h1>Admin Dashboard</h1><span class="section-chip">CONTROL CENTER</span></div><button class="logout-btn" onclick="logout()">Logout</button></header>
 
-<header>
-  <h1>Admin Dashboard</h1>
-  <button class="logout-btn" onclick="logout()">Logout</button>
-</header>
+<div class="container admin-container">
+  <div class="welcome-card"><h2>Welcome, Admin 👋</h2><p class="muted">Manage sections, timetables and holidays</p></div>
 
-<div class="container">
+  <div class="admin-grid">
+    <section class="card admin-card">
+      <h3>📚 Section Management</h3>
+      <p class="admin-help">Create a section first. Students will see only configured sections during signup.</p>
+      <div class="admin-row"><input id="sectionName" type="text" placeholder="Example: 24E1P1"><button class="save-btn" onclick="saveSection()">Add / Update</button></div>
+      <div class="admin-row"><select id="sectionSelect" onchange="loadTimetable()"><option value="">Select section</option></select><button class="delete-btn" onclick="deleteSection()">Delete Section</button></div>
+      <div id="sectionStatus" class="admin-status"></div>
+    </section>
 
-  <div class="welcome-card">
-    <h2>Welcome, Admin 👋</h2>
-    <p class="muted">Manage holidays for students</p>
+    <section class="card admin-card">
+      <h3>🕐 Timetable Management</h3>
+      <p class="admin-help">Add subject and time for each day. Changes save to <b>timetables/{section}</b>.</p>
+      <div class="admin-row"><select id="timetableSection" onchange="syncSectionSelectors();loadTimetable()"><option value="">Select section</option></select></div>
+      <div id="timetableEditor" class="timetable-editor"></div>
+      <button class="save-btn full-btn" onclick="saveTimetable()">💾 Save Timetable</button>
+    </section>
+
+    <section class="card admin-card">
+      <h3>🏖 Holiday Management</h3>
+      <label class="radio-line"><input type="radio" name="mode" value="single" checked onchange="toggleHolidayMode()"> Today / Single Date</label>
+      <label class="radio-line"><input type="radio" name="mode" value="range" onchange="toggleHolidayMode()"> Date Range</label>
+      <input type="date" id="startDate">
+      <input type="date" id="endDate" style="display:none">
+      <input type="text" id="reason" placeholder="Reason (optional)">
+      <button class="save-btn full-btn" onclick="saveHoliday()">Save Holiday</button>
+      <button class="delete-btn full-btn" onclick="deleteHoliday()">Delete Holiday</button>
+    </section>
   </div>
-
-  <div class="card">
-    <h3>Mark Holiday</h3>
-
-    <label>
-      <input type="radio" name="mode" value="single" checked>
-      Today Only
-    </label><br><br>
-
-    <label>
-      <input type="radio" name="mode" value="range">
-      Date Range
-    </label><br><br>
-
-    <input type="date" id="startDate">
-    <input type="date" id="endDate" placeholder="End date (optional)">
-    <input type="text" id="reason" placeholder="Reason (optional)">
-
-    <button onclick="saveHoliday()" class="save-btn">Save Holiday</button>
-    <button onclick="deleteHoliday()" class="delete-btn">Delete Holiday</button>
-    
-  </div>
-
 </div>
-
-<script>
-  function logout() {
-    sessionStorage.clear();
-    location.href = "index.html";
-  }
-</script>
-
+<div class="made-by">© 2026 Made by <b>VIVEK™</b></div>
 <script type="module" src="js/admin.js"></script>
-</body>
-</html>
+<script>function logout(){sessionStorage.clear();location.href="index.html"}</script>
+</body></html>

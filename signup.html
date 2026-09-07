@@ -1,89 +1,68 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-  <title>Create Account</title>
+  <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Create Account</title>
   <link rel="stylesheet" href="css/style.css">
 </head>
-
 <body class="bg">
+  <div class="login-wrapper">
+    <div class="login-card">
+      <h2>📝 Create Account</h2>
+      <p class="muted">Register to mark attendance</p>
 
-<div class="login-wrapper">
-  <div class="login-card">
-    <h2>📝 Create Account</h2>
+      <div class="field"><input id="name" required><label>Full Name</label></div>
+      <div class="field"><input id="roll" required><label>Registration Number</label></div>
 
-    <div class="field">
-      <input id="name" required />
-      <label>Full Name</label>
+      <div class="field select-field">
+        <select id="section" required>
+          <option value="">Loading sections...</option>
+        </select>
+        <label>SEC / Section</label>
+      </div>
+      <p id="sectionHint" class="hint">Select the section assigned by your college.</p>
+
+      <div class="field">
+        <input id="password" type="password" minlength="6" required>
+        <label>Password</label>
+        <span class="eye" onclick="togglePwd('password')">👁</span>
+      </div>
+
+      <button onclick="signup()">Create Account</button>
+      <p class="hint">Already have an account? <a href="index.html">Login</a></p>
     </div>
-
-    <div class="field">
-      <input id="roll" required />
-      <label>Registration Number</label>
-    </div>
-
-    <div class="field">
-      <input id="password" type="password" required />
-      <label>Password</label>
-    </div>
-
-    <button onclick="signup()">Create Account</button>
   </div>
-</div>
 
-<!-- ✅ WhatsApp Floating Button -->
-<div class="whatsapp" onclick="openWAModal()">
-  <img src="https://upload.wikimedia.org/wikipedia/commons/6/6b/WhatsApp.svg">
-</div>
-
-<!-- ✅ WhatsApp Modal -->
-<div id="waModal" class="wa-modal">
-  <div class="wa-box">
-    <h3>WhatsApp Support</h3>
-
-    <input id="waReg" placeholder="Register Number (optional)">
-    <input id="waName" placeholder="Your Name">
-
-    <button onclick="sendWhatsApp()">Send</button>
-    <button class="cancel" onclick="closeWAModal()">Cancel</button>
+  <div class="whatsapp" onclick="openWAModal()"><img src="https://upload.wikimedia.org/wikipedia/commons/6/6b/WhatsApp.svg"></div>
+  <div id="waModal" class="wa-modal">
+    <div class="wa-box">
+      <h3>WhatsApp Support</h3>
+      <input id="waReg" placeholder="Register Number (optional)">
+      <input id="waName" placeholder="Your Name">
+      <button onclick="sendWhatsApp()">Send</button>
+      <button class="cancel" onclick="closeWAModal()">Cancel</button>
+    </div>
   </div>
-</div>
 
-<script type="module" src="js/signup.js"></script>
+  <div class="made-by">© 2026 Made by <b>VIVEK™</b></div>
 
-<script>
-function openWAModal() {
-  document.getElementById("waModal").style.display = "flex";
-}
-
-function closeWAModal() {
-  document.getElementById("waModal").style.display = "none";
-}
-
-function sendWhatsApp() {
-  const reg = document.getElementById("waReg").value.trim();
-  const name = document.getElementById("waName").value.trim();
-
-  if (!name) {
-    alert("Please enter your name");
-    return;
-  }
-
-  const msg =
-`Hello Support Team 👋
-Name: ${name}
-Reg No: ${reg || "Not provided"}
-
-I need help.`;
-
-  window.open(
-    "https://wa.me/919337112750?text=" + encodeURIComponent(msg),
-    "_blank"
-  );
-
-  closeWAModal();
-}
-</script>
-
+  <script type="module" src="js/signup.js"></script>
+  <script>
+    function togglePwd(id) {
+      const input = document.getElementById(id);
+      input.type = input.type === "password" ? "text" : "password";
+    }
+    function openWAModal() { document.getElementById("waModal").style.display = "flex"; }
+    function closeWAModal() { document.getElementById("waModal").style.display = "none"; }
+    function sendWhatsApp() {
+      const reg = document.getElementById("waReg").value.trim();
+      const name = document.getElementById("waName").value.trim();
+      if (!name) return alert("Please enter your name");
+      const msg = `Hello Support Team 👋\nName: ${name}\nReg No: ${reg || "Not provided"}\n\nI need help.`;
+      window.open("https://wa.me/919337112750?text=" + encodeURIComponent(msg), "_blank");
+      closeWAModal();
+    }
+  </script>
 </body>
 </html>
