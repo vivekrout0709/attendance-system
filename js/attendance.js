@@ -77,12 +77,14 @@ function normalizeSubject(name) {
     .trim()
     .toUpperCase();
 
-  // If subject has LAB, remove LAB and everything after it
-  // CN LAB(C-004) -> CN
-  // RDMWS LAB(C-004) -> RDMWS
-  subject = subject.replace(/\s+LAB.*$/i, "");
+  // Treat anything after LAB as the same base subject
+  const labIndex = subject.indexOf("LAB");
 
-  // Clean extra spaces
+  if (labIndex !== -1) {
+    subject = subject.substring(0, labIndex).trim();
+  }
+
+  // Normalize spaces in the base subject
   subject = subject.replace(/\s+/g, " ").trim();
 
   return subject;
