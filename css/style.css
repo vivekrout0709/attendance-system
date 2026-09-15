@@ -2041,3 +2041,124 @@ a,
   .remove-btn { min-height:42px; }
   .admin-card { padding:17px; }
 }
+
+
+/* =========================================================
+   FINAL MOBILE LOTTIE + POLISH
+   ========================================================= */
+
+/* Keep the login animation visible on phones. */
+@media (max-width: 900px) {
+  .login-illustration {
+    display: flex;
+    width: 100%;
+    min-height: 180px;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto 2px;
+  }
+
+  .login-illustration::before {
+    width: 230px;
+    height: 230px;
+  }
+
+  .login-illustration lottie-player {
+    display: block !important;
+    width: min(72vw, 280px) !important;
+    height: min(42vw, 220px) !important;
+    min-height: 150px;
+    max-height: 220px;
+    margin: 0 auto;
+  }
+}
+
+@media (max-width: 700px) {
+  .login-wrapper {
+    min-height: 100dvh;
+    padding: 12px 12px calc(24px + env(safe-area-inset-bottom));
+    gap: 8px;
+    justify-content: center;
+  }
+
+  .login-wrapper::before {
+    margin-bottom: 0;
+  }
+
+  .login-illustration {
+    display: flex !important;
+    min-height: 175px;
+    height: 175px;
+    margin: 0 auto 2px;
+  }
+
+  .login-illustration::before {
+    width: 210px;
+    height: 210px;
+  }
+
+  .login-illustration lottie-player {
+    display: block !important;
+    width: min(70vw, 270px) !important;
+    height: 175px !important;
+    max-width: 270px;
+    max-height: 175px;
+  }
+
+  .login-card {
+    position: relative;
+    z-index: 2;
+    max-width: 430px;
+    padding: 23px 18px 20px;
+    border-radius: 25px;
+  }
+}
+
+@media (max-width: 380px) {
+  .login-wrapper {
+    padding: 8px 10px calc(20px + env(safe-area-inset-bottom));
+    gap: 5px;
+  }
+
+  .login-illustration {
+    min-height: 145px;
+    height: 145px;
+  }
+
+  .login-illustration::before {
+    width: 175px;
+    height: 175px;
+  }
+
+  .login-illustration lottie-player {
+    width: 220px !important;
+    height: 145px !important;
+  }
+
+  .login-card {
+    padding: 20px 15px 18px;
+  }
+}
+
+/* Slightly richer touch feedback for the whole dashboard. */
+.card,
+.summary-card,
+.login-card,
+.attendance-info,
+.welcome-card {
+  -webkit-tap-highlight-color: transparent;
+}
+
+@media (hover: none) {
+  .card:hover {
+    transform: none;
+  }
+
+  .present-btn:active,
+  .absent-btn:active,
+  .login-card button:active,
+  .save-btn:active,
+  .delete-btn:active {
+    transform: scale(.98);
+  }
+}
