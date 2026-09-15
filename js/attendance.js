@@ -76,10 +76,8 @@ function normalizeSubject(name) {
   return String(name || "")
     .trim()
     .toUpperCase()
+    .replace(/\s+LAB(?:\s+[A-Z0-9-]+)?\s*$/i, "")
     .replace(/\s+/g, " ")
-    .replace(/\s*LAB\s*/g, " ")
-    .replace(/\s*\(\s*/g, "(")
-    .replace(/\s*\)\s*/g, ")")
     .trim();
 }
 
