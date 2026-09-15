@@ -74,9 +74,13 @@ const day = new Date().toLocaleDateString("en-US", {
 
 function normalizeSubject(name) {
   return String(name || "")
-    .split(" ")[0]
     .trim()
-    .toUpperCase();
+    .toUpperCase()
+    .replace(/\s+/g, " ")
+    .replace(/\s*LAB\s*/g, " ")
+    .replace(/\s*\(\s*/g, "(")
+    .replace(/\s*\)\s*/g, ")")
+    .trim();
 }
 
 
