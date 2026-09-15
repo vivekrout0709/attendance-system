@@ -73,12 +73,19 @@ const day = new Date().toLocaleDateString("en-US", {
 // =====================================================
 
 function normalizeSubject(name) {
-  return String(name || "")
+  let subject = String(name || "")
     .trim()
-    .toUpperCase()
-    .replace(/\s+LAB(?:\s+[A-Z0-9-]+)?\s*$/i, "")
-    .replace(/\s+/g, " ")
-    .trim();
+    .toUpperCase();
+
+  // If subject has LAB, remove LAB and everything after it
+  // CN LAB(C-004) -> CN
+  // RDMWS LAB(C-004) -> RDMWS
+  subject = subject.replace(/\s+LAB.*$/i, "");
+
+  // Clean extra spaces
+  subject = subject.replace(/\s+/g, " ").trim();
+
+  return subject;
 }
 
 
