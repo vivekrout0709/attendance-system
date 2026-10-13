@@ -154,12 +154,10 @@ async function loadStudentProfile() {
 
   // Display section
   if (sectionLabel) {
-
-    sectionLabel.innerText =
-      SECTION
-        ? `SEC: ${SECTION}`
-        : "SEC: Not set";
+    sectionLabel.innerText = SECTION ? `SEC: ${SECTION}` : "SEC: Not set";
   }
+  const heroSection = document.getElementById("heroSection");
+  if (heroSection) heroSection.textContent = SECTION ? `SECTION · ${SECTION}` : "SECTION · NOT SET";
 
 
   // Section missing
@@ -438,7 +436,11 @@ async function loadWeeklyTimetable() {
       return;
     }
     const data = snap.data();
-    box.innerHTML = WEEK_DAYS.map((weekday) => {
+    // Put today's card first so it is immediately visible and visually prioritized.
+    const orderedDays = day && WEEK_DAYS.includes(day)
+      ? [day, ...WEEK_DAYS.filter((weekday) => weekday !== day)]
+      : WEEK_DAYS;
+    box.innerHTML = orderedDays.map((weekday) => {
       const entries = Array.isArray(data[weekday]) ? data[weekday] : [];
       const todayClass = weekday === day ? " is-today" : "";
       const content = entries.length ? entries.map((item, index) => {
@@ -449,6 +451,7 @@ async function loadWeeklyTimetable() {
       }).join("") : '<p class="weekly-empty">No classes scheduled</p>';
       return `<article class="weekly-day${todayClass}"><div class="weekly-day-head"><h3>${weekday}</h3>${weekday === day ? '<span class="today-pill">TODAY</span>' : ""}</div><div class="weekly-classes">${content}</div></article>`;
     }).join("");
+    if (typeof window.filterTimetable === "function") window.filterTimetable();
   } catch (error) {
     console.error("Weekly timetable loading error:", error);
     box.innerHTML = '<div class="card center"><h3>Unable to load weekly timetable</h3><p>Check your connection and refresh the page.</p></div>';

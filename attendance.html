@@ -5,20 +5,34 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Attendance Dashboard</title>
   <link rel="stylesheet" href="css/style.css">
+  <script src="https://unpkg.com/@lottiefiles/lottie-player@latest/dist/lottie-player.js"></script>
 </head>
 <body class="bg">
 <header>
   <div>
     <h1>Today's Attendance</h1>
-    <span id="sectionLabel" class="section-chip">SEC: ...</span>
+    
   </div>
   <button class="logout-btn" onclick="logout()">Logout</button>
 </header>
 
-<div class="welcome-card">
-  <h2 id="welcomeName">Welcome 👋</h2>
-  <p id="liveDateTime" class="live-time"></p>
-</div>
+<section class="dashboard-hero" aria-label="Welcome and quick actions">
+  <div class="hero-copy">
+    <span class="eyebrow"><span class="status-dot"></span> STUDENT SPACE <span class="eyebrow-divider">/</span> YOUR ACADEMIC HUB</span>
+    <h2 id="welcomeName">Welcome 👋</h2>
+    <p class="hero-subtitle">A clearer view of your classes, attendance and week ahead.</p>
+    <div class="hero-meta"><span class="hero-date-icon">◷</span><p id="liveDateTime" class="live-time"></p><span id="heroSection" class="hero-section">SECTION · —</span></div>
+    <div class="hero-actions"><button class="hero-primary" type="button" onclick="showDashboardTab('weeklyTab', document.getElementById('weeklyTabButton'))">View this week <span aria-hidden="true">↗</span></button><button class="hero-secondary" type="button" onclick="document.getElementById('summary').scrollIntoView({behavior:'smooth',block:'start'})">Attendance insights <span aria-hidden="true">↓</span></button></div>
+  </div>
+  <div class="hero-art" aria-hidden="true">
+    <div class="orbit orbit-one"></div><div class="orbit orbit-two"></div>
+    <div class="hero-orb"><span>✦</span></div>
+    <div class="attendance-lottie-wrap">
+      <lottie-player class="attendance-lottie" src="assets/lottie/attendance-loader.json" background="transparent" speed="0.75" loop autoplay></lottie-player>
+    </div>
+    <div class="hero-art-caption"><span class="art-caption-dot"></span> STAY ON TRACK</div>
+  </div>
+</section>
 
 <p id="sundayMsg" class="center muted" style="display:none;">Today is Sunday 🎉 Have a fun day!</p>
 
@@ -42,9 +56,10 @@
 
 <section class="weekly-section tab-panel" id="weeklyTab" aria-labelledby="weeklyTitle" hidden>
   <div class="weekly-heading">
-    <div><h2 id="weeklyTitle">📅 Weekly Timetable</h2><p>Monday – Sunday · Based on your registered section</p></div>
+    <div><span class="eyebrow">YOUR WEEK AT A GLANCE</span><h2 id="weeklyTitle">Weekly timetable</h2><p>Today is highlighted first. Find a subject or jump straight to your day.</p></div>
     <span id="weeklySectionBadge" class="section-chip">SEC: ...</span>
   </div>
+  <div class="timetable-tools"><label class="timetable-search"><span aria-hidden="true">⌕</span><input id="timetableSearch" type="search" placeholder="Find a subject or day…" aria-label="Search timetable by subject or day"><kbd>SEARCH</kbd></label><button class="today-jump" type="button" onclick="jumpToToday()"><span aria-hidden="true">◎</span> Jump to today</button><span id="timetableCount" class="timetable-count">Your week</span></div>
   <div id="weeklyTimetable" class="weekly-grid"><div class="card center">Loading weekly timetable…</div></div>
 </section>
 
@@ -62,6 +77,26 @@
 <div class="made-by">© 2026 Made by <b>VIVEK™</b></div>
 <script type="module" src="js/attendance.js"></script>
 <script>
+function jumpToToday() {
+  showDashboardTab('weeklyTab', document.getElementById('weeklyTabButton'));
+  requestAnimationFrame(() => {
+    const todayCard = document.querySelector('.weekly-day.is-today');
+    if (todayCard) todayCard.scrollIntoView({behavior:'smooth', block:'center'});
+  });
+}
+function filterTimetable() {
+  const query = (document.getElementById('timetableSearch')?.value || '').trim().toLowerCase();
+  const cards = [...document.querySelectorAll('#weeklyTimetable .weekly-day')];
+  let visible = 0;
+  cards.forEach(card => {
+    const match = !query || card.textContent.toLowerCase().includes(query);
+    card.hidden = !match;
+    if (match) visible++;
+  });
+  const count = document.getElementById('timetableCount');
+  if (count) count.textContent = query ? `${visible} day${visible === 1 ? '' : 's'} found` : '7 days · Monday–Sunday';
+}
+document.getElementById('timetableSearch')?.addEventListener('input', filterTimetable);
 function showDashboardTab(panelId, button) {
   document.querySelectorAll('.tab-panel').forEach(panel => {
     const isActive = panel.id === panelId;
