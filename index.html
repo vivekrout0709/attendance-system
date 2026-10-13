@@ -299,6 +299,15 @@
      SCRIPTS
 ========================== -->
 
+
+<script>
+  // Remembered login: skip the login screen when a valid local profile is present.
+  (() => {
+    const uid = localStorage.getItem('uid');
+    const role = localStorage.getItem('role');
+    if (uid && role) location.replace(role === 'admin' ? 'admin.html' : 'attendance.html');
+  })();
+</script>
 <script
   type="module"
   src="js/auth.js"

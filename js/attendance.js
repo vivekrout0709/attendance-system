@@ -1,4 +1,5 @@
-import { db } from "./firebase.js";
+import { db, auth } from "./firebase.js";
+import { signOut } from "https://www.gstatic.com/firebasejs/12.8.0/firebase-auth.js";
 
 import {
   doc,
@@ -14,7 +15,7 @@ import {
 // ADMIN PROTECTION
 // =====================================================
 
-if (sessionStorage.getItem("admin") === "true") {
+if (localStorage.getItem("admin") === "true") {
   location.replace("admin.html");
   throw new Error("Admin blocked");
 }
@@ -24,8 +25,8 @@ if (sessionStorage.getItem("admin") === "true") {
 // SESSION
 // =====================================================
 
-const roll = sessionStorage.getItem("roll");
-const uid = sessionStorage.getItem("uid");
+const roll = localStorage.getItem("roll");
+const uid = localStorage.getItem("uid");
 
 if (!roll || !uid) {
   location.replace("index.html");
@@ -37,9 +38,10 @@ if (!roll || !uid) {
 // LOGOUT
 // =====================================================
 
-window.logout = () => {
-  sessionStorage.clear();
-  location.href = "index.html";
+window.logout = async () => {
+  localStorage.clear();
+  try { await signOut(auth); } catch (error) { console.error("Sign out failed", error); }
+  location.replace("index.html");
 };
 
 
@@ -59,13 +61,18 @@ const sectionLabel = document.getElementById("sectionLabel");
 // BASIC DATA
 // =====================================================
 
-let SECTION = sessionStorage.getItem("section") || "";
+let SECTION = localStorage.getItem("section") || "";
 
-const today = new Date().toLocaleDateString("en-CA");
-
-const day = new Date().toLocaleDateString("en-US", {
-  weekday: "long"
-});
+// Build a stable local YYYY-MM-DD date (locale formatting can vary by browser).
+function localDateISO(date = new Date()) {
+  const y = date.getFullYear();
+  const m = String(date.getMonth() + 1).padStart(2, "0");
+  const d = String(date.getDate()).padStart(2, "0");
+  return `${y}-${m}-${d}`;
+}
+const today = localDateISO();
+const day = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"][new Date().getDay()];
+const WEEK_DAYS = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"];
 
 
 // =====================================================
@@ -73,21 +80,10 @@ const day = new Date().toLocaleDateString("en-US", {
 // =====================================================
 
 function normalizeSubject(name) {
-  let subject = String(name || "")
+  return String(name || "")
+    .split(" ")[0]
     .trim()
     .toUpperCase();
-
-  // Treat anything after LAB as the same base subject
-  const labIndex = subject.indexOf("LAB");
-
-  if (labIndex !== -1) {
-    subject = subject.substring(0, labIndex).trim();
-  }
-
-  // Normalize spaces in the base subject
-  subject = subject.replace(/\s+/g, " ").trim();
-
-  return subject;
 }
 
 
@@ -126,7 +122,7 @@ async function loadStudentProfile() {
   // Prevent admin from entering student dashboard
   if (data.role === "admin") {
 
-    sessionStorage.setItem("admin", "true");
+    localStorage.setItem("admin", "true");
 
     location.replace("admin.html");
 
@@ -149,7 +145,7 @@ async function loadStudentProfile() {
       .trim()
       .toUpperCase();
 
-    sessionStorage.setItem(
+    localStorage.setItem(
       "section",
       SECTION
     );
@@ -402,6 +398,7 @@ window.markAttendance = async (
     // Reload dashboard
     await Promise.all([
       loadToday(),
+      loadWeeklyTimetable(),
       loadSummary()
     ]);
 
@@ -422,6 +419,41 @@ window.markAttendance = async (
 // =====================================================
 // LOAD TODAY'S CLASSES
 // =====================================================
+
+async function loadWeeklyTimetable() {
+  const box = document.getElementById("weeklyTimetable");
+  const badge = document.getElementById("weeklySectionBadge");
+  if (!box) return;
+  box.innerHTML = '<div class="card center">Loading weekly timetable…</div>';
+  try {
+    const section = SECTION || localStorage.getItem("section") || "";
+    if (badge) badge.textContent = section ? `SEC: ${section}` : "SECTION NOT SET";
+    if (!section) {
+      box.innerHTML = '<div class="card center">Your section is missing. Please log out and sign in again.</div>';
+      return;
+    }
+    const snap = await getDoc(doc(db, "timetables", section));
+    if (!snap.exists()) {
+      box.innerHTML = `<div class="card center"><h3>⚠️ Timetable not found</h3><p>No timetable configured for <b>${esc(section)}</b>.</p></div>`;
+      return;
+    }
+    const data = snap.data();
+    box.innerHTML = WEEK_DAYS.map((weekday) => {
+      const entries = Array.isArray(data[weekday]) ? data[weekday] : [];
+      const todayClass = weekday === day ? " is-today" : "";
+      const content = entries.length ? entries.map((item, index) => {
+        const subject = String(item?.subject || "").trim();
+        if (!subject) return "";
+        const time = String(item?.time || "").trim();
+        return `<div class="weekly-class"><span class="weekly-class-number">${index + 1}</span><div><strong>${esc(subject)}</strong>${time ? `<small>🕒 ${esc(time)}</small>` : "<small>Time not set</small>"}</div></div>`;
+      }).join("") : '<p class="weekly-empty">No classes scheduled</p>';
+      return `<article class="weekly-day${todayClass}"><div class="weekly-day-head"><h3>${weekday}</h3>${weekday === day ? '<span class="today-pill">TODAY</span>' : ""}</div><div class="weekly-classes">${content}</div></article>`;
+    }).join("");
+  } catch (error) {
+    console.error("Weekly timetable loading error:", error);
+    box.innerHTML = '<div class="card center"><h3>Unable to load weekly timetable</h3><p>Check your connection and refresh the page.</p></div>';
+  }
+}
 
 async function loadToday() {
 
@@ -967,6 +999,7 @@ async function startApp() {
     // Dashboard
     await Promise.all([
       loadToday(),
+      loadWeeklyTimetable(),
       loadSummary()
     ]);
 

@@ -1,9 +1,9 @@
 import { db } from "./firebase.js";
 import { doc, getDoc, collection, getDocs } from "https://www.gstatic.com/firebasejs/12.8.0/firebase-firestore.js";
 
-if (sessionStorage.getItem("admin") === "true") { location.replace("admin.html"); throw new Error("Admin blocked"); }
-const roll = sessionStorage.getItem("roll");
-const uid = sessionStorage.getItem("uid");
+if (localStorage.getItem("admin") === "true") { location.replace("admin.html"); throw new Error("Admin blocked"); }
+const roll = localStorage.getItem("roll");
+const uid = localStorage.getItem("uid");
 if (!roll || !uid) { location.replace("index.html"); throw new Error("No session"); }
 
 const historyBox = document.getElementById("historyBox");
@@ -19,7 +19,7 @@ async function loadProfile(){
   const snap=await getDoc(doc(db,"users",uid));
   if(!snap.exists()) return;
   const data=snap.data();
-  if(data.role === "admin"){sessionStorage.setItem("admin","true");location.replace("admin.html");return;}
+  if(data.role === "admin"){localStorage.setItem("admin","true");location.replace("admin.html");return;}
   studentName.innerText=`${data.name || "Student"}'s Attendance History`;
   sectionLabel.innerText=data.section ? `SEC: ${String(data.section).toUpperCase()}` : "";
 }

@@ -1,7 +1,9 @@
 import { auth, db } from "./firebase.js";
 
 import {
-  signInWithEmailAndPassword
+  signInWithEmailAndPassword,
+  setPersistence,
+  browserLocalPersistence
 } from "https://www.gstatic.com/firebasejs/12.8.0/firebase-auth.js";
 
 import {
@@ -69,6 +71,8 @@ window.login = async () => {
       rollToEmail(roll);
 
 
+    await setPersistence(auth, browserLocalPersistence);
+
     const cred =
       await signInWithEmailAndPassword(
         auth,
@@ -116,19 +120,19 @@ window.login = async () => {
        SESSION
     =========================== */
 
-    sessionStorage.setItem(
+    localStorage.setItem(
       "uid",
       cred.user.uid
     );
 
 
-    sessionStorage.setItem(
+    localStorage.setItem(
       "roll",
       userData.roll
     );
 
 
-    sessionStorage.setItem(
+    localStorage.setItem(
       "role",
       userData.role
     );
@@ -140,7 +144,7 @@ window.login = async () => {
 
     if (userData.section) {
 
-      sessionStorage.setItem(
+      localStorage.setItem(
         "section",
         userData.section
       );
@@ -157,7 +161,7 @@ window.login = async () => {
       userData.role === "admin"
     ) {
 
-      sessionStorage.setItem(
+      localStorage.setItem(
         "admin",
         "true"
       );

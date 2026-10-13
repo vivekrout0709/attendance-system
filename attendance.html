@@ -21,18 +21,33 @@
 </div>
 
 <p id="sundayMsg" class="center muted" style="display:none;">Today is Sunday 🎉 Have a fun day!</p>
-<div class="container" id="today"></div>
 
-<div class="attendance-info">
-  <div class="info-icon">📊</div>
-  <div>
-    <h2>Attendance Planner</h2>
-    <p>See today's <b>Present</b>/<b>Absent</b> impact and how many classes you need to reach <b>80%</b>.</p>
+<nav class="dashboard-tabs" role="tablist" aria-label="Student dashboard sections">
+  <button type="button" class="dashboard-tab active" role="tab" aria-selected="true" aria-controls="dashboardTab" id="dashboardTabButton" onclick="showDashboardTab('dashboardTab', this)">📊 Dashboard</button>
+  <button type="button" class="dashboard-tab" role="tab" aria-selected="false" aria-controls="weeklyTab" id="weeklyTabButton" onclick="showDashboardTab('weeklyTab', this)">📅 Weekly Timetable</button>
+</nav>
+
+<div id="dashboardTab" class="tab-panel">
+  <div class="container" id="today"></div>
+  <div class="attendance-info">
+    <div class="info-icon">📊</div>
+    <div>
+      <h2>Attendance Planner</h2>
+      <p>See today's <b>Present</b>/<b>Absent</b> impact and how many classes you need to reach <b>80%</b>.</p>
+    </div>
   </div>
+  <h2 class="center">Per Subject Attendance</h2>
+  <div class="container" id="summary"></div>
 </div>
 
-<h2 class="center">Per Subject Attendance</h2>
-<div class="container" id="summary"></div>
+<section class="weekly-section tab-panel" id="weeklyTab" aria-labelledby="weeklyTitle" hidden>
+  <div class="weekly-heading">
+    <div><h2 id="weeklyTitle">📅 Weekly Timetable</h2><p>Monday – Sunday · Based on your registered section</p></div>
+    <span id="weeklySectionBadge" class="section-chip">SEC: ...</span>
+  </div>
+  <div id="weeklyTimetable" class="weekly-grid"><div class="card center">Loading weekly timetable…</div></div>
+</section>
+
 <div class="whatsapp" onclick="openWAModal()"><img src="https://upload.wikimedia.org/wikipedia/commons/6/6b/WhatsApp.svg"></div>
 <div id="waModal" class="wa-modal">
   <div class="wa-box">
@@ -47,9 +62,27 @@
 <div class="made-by">© 2026 Made by <b>VIVEK™</b></div>
 <script type="module" src="js/attendance.js"></script>
 <script>
+function showDashboardTab(panelId, button) {
+  document.querySelectorAll('.tab-panel').forEach(panel => {
+    const isActive = panel.id === panelId;
+    panel.hidden = !isActive;
+    panel.classList.remove('tab-panel-enter');
+    if (isActive) {
+      // Restart the entry animation whenever a tab is opened.
+      void panel.offsetWidth;
+      panel.classList.add('tab-panel-enter');
+    }
+  });
+  document.querySelectorAll('.dashboard-tab[role="tab"]').forEach(tab => {
+    const active = tab === button;
+    tab.classList.toggle('active', active);
+    tab.setAttribute('aria-selected', String(active));
+  });
+  // Keep the page position steady while switching tabs.
+}
 function openWAModal() {
   document.getElementById("waModal").style.display = "flex";
-  const roll = sessionStorage.getItem("roll");
+  const roll = localStorage.getItem("roll");
   if (roll) document.getElementById("waReg").value = roll;
 }
 function closeWAModal() { document.getElementById("waModal").style.display = "none"; }

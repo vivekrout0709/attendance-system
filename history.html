@@ -12,5 +12,5 @@
 </div>
 <div class="made-by">© 2026 Made by <b>VIVEK™</b></div>
 <script type="module" src="js/history.js"></script>
-<script>function logout(){sessionStorage.clear();location.href="index.html"}</script>
+<script>async function logout(){localStorage.clear(); try { const {auth}=await import("js/firebase.js"); const {signOut}=await import("https://www.gstatic.com/firebasejs/12.8.0/firebase-auth.js"); await signOut(auth); } catch(e) { console.error(e); } location.replace("index.html"); }</script>
 </body></html>

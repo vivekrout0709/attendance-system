@@ -1,5 +1,5 @@
 import { auth, db } from "./firebase.js";
-import { createUserWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/12.8.0/firebase-auth.js";
+import { createUserWithEmailAndPassword, setPersistence, browserLocalPersistence } from "https://www.gstatic.com/firebasejs/12.8.0/firebase-auth.js";
 import { collection, getDocs, doc, getDoc, setDoc } from "https://www.gstatic.com/firebasejs/12.8.0/firebase-firestore.js";
 
 const sectionSelect = document.getElementById("section");
@@ -55,16 +55,17 @@ window.signup = async () => {
       return;
     }
 
+    await setPersistence(auth, browserLocalPersistence);
     const cred = await createUserWithEmailAndPassword(auth, rollToEmail(roll), password);
     await setDoc(doc(db, "users", cred.user.uid), {
       name, roll, section, role: "student", createdAt: new Date()
     });
 
-    sessionStorage.setItem("uid", cred.user.uid);
-    sessionStorage.setItem("roll", roll);
-    sessionStorage.setItem("section", section);
-    sessionStorage.setItem("role", "student");
-    sessionStorage.removeItem("admin");
+    localStorage.setItem("uid", cred.user.uid);
+    localStorage.setItem("roll", roll);
+    localStorage.setItem("section", section);
+    localStorage.setItem("role", "student");
+    localStorage.removeItem("admin");
     location.replace("attendance.html");
   } catch (err) {
     console.error(err);

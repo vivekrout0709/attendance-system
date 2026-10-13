@@ -2162,3 +2162,152 @@ a,
     transform: scale(.98);
   }
 }
+
+
+/* Weekly timetable */
+.weekly-section { width:min(1050px, calc(100% - 30px)); margin:24px auto 28px; }
+.weekly-heading { display:flex; align-items:center; justify-content:space-between; gap:14px; margin-bottom:14px; }
+.weekly-heading h2 { margin:0 0 5px; }
+.weekly-heading p { margin:0; color:#64748b; font-size:14px; }
+.weekly-grid { display:grid; grid-template-columns:repeat(2, minmax(0, 1fr)); gap:14px; }
+.weekly-day { min-width:0; background:#fff; border:1px solid #e2e8f0; border-radius:16px; padding:15px; box-shadow:0 5px 18px rgba(15,23,42,.045); }
+.weekly-day.is-today { border:2px solid #6366f1; background:linear-gradient(180deg,#eef2ff 0%,#fff 65%); }
+.weekly-day-head { display:flex; align-items:center; justify-content:space-between; gap:8px; padding-bottom:10px; border-bottom:1px solid #e5e7eb; }
+.weekly-day-head h3 { margin:0; font-size:16px; }
+.today-pill { border-radius:999px; background:#4f46e5; color:#fff; font-size:10px; font-weight:800; padding:5px 8px; letter-spacing:.04em; }
+.weekly-classes { display:grid; gap:9px; padding-top:10px; }
+.weekly-class { display:flex; align-items:flex-start; gap:10px; border-radius:11px; background:#f8fafc; padding:10px; }
+.weekly-class-number { display:flex; flex:0 0 25px; width:25px; height:25px; align-items:center; justify-content:center; border-radius:8px; background:#e0e7ff; color:#4338ca; font-size:12px; font-weight:800; }
+.weekly-class strong { display:block; color:#1e293b; overflow-wrap:anywhere; }
+.weekly-class small { display:block; color:#64748b; margin-top:4px; }
+.weekly-empty { color:#94a3b8; font-size:13px; margin:4px 0; }
+@media (min-width:900px) { .weekly-grid { grid-template-columns:repeat(3, minmax(0, 1fr)); } }
+@media (max-width:560px) { .weekly-section { width:calc(100% - 22px); } .weekly-heading { align-items:flex-start; } .weekly-heading .section-chip { font-size:11px; white-space:nowrap; } .weekly-grid { grid-template-columns:1fr; gap:10px; } .weekly-day { padding:13px; } }
+
+
+/* Dashboard navigation tabs */
+.dashboard-tabs {
+  width: min(1050px, calc(100% - 30px)); margin: 20px auto 0; display:flex; gap:8px;
+  padding:6px; background:rgba(255,255,255,.78); border:1px solid #e2e8f0;
+  border-radius:15px; box-shadow:0 5px 18px rgba(15,23,42,.05); overflow-x:auto;
+}
+.dashboard-tab { flex:1 0 auto; display:inline-flex; align-items:center; justify-content:center; gap:7px;
+  min-height:44px; padding:10px 16px; border:0; border-radius:11px; background:transparent;
+  color:#475569; font:inherit; font-weight:750; text-decoration:none; cursor:pointer; white-space:nowrap;
+}
+.dashboard-tab.active { color:#4338ca; background:#eef2ff; box-shadow:inset 0 0 0 1px #c7d2fe; }
+.dashboard-tab:focus-visible { outline:3px solid #818cf8; outline-offset:2px; }
+.tab-panel[hidden] { display:none !important; }
+.tab-panel { min-width:0; }
+@media (max-width:560px) { .dashboard-tabs { width:calc(100% - 22px); gap:5px; padding:5px; } .dashboard-tab { padding:10px 12px; font-size:13px; } }
+
+
+/* Smooth, calm dashboard interactions */
+.dashboard-tabs {
+  position: sticky;
+  top: 10px;
+  z-index: 20;
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  transition: box-shadow .22s ease, border-color .22s ease, background .22s ease;
+}
+.dashboard-tab {
+  transition: color .2s ease, background .2s ease, box-shadow .2s ease, transform .18s ease;
+}
+.dashboard-tab:hover:not(.active) {
+  color: #312e81;
+  background: rgba(238, 242, 255, .65);
+}
+.dashboard-tab:active { transform: scale(.985); }
+.tab-panel-enter { animation: tabPanelArrive .28s cubic-bezier(.2,.7,.2,1) both; }
+@keyframes tabPanelArrive {
+  from { opacity: 0; transform: translateY(8px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+.card, .summary-card, .weekly-day, .attendance-info, .welcome-card {
+  transition: box-shadow .22s ease, border-color .22s ease, transform .22s ease;
+}
+@media (hover: hover) and (prefers-reduced-motion: no-preference) {
+  .weekly-day:hover { transform: translateY(-2px); box-shadow: 0 10px 25px rgba(15,23,42,.08); }
+}
+@media (prefers-reduced-motion: reduce) {
+  .tab-panel-enter { animation: none !important; }
+  .dashboard-tab, .card, .summary-card, .weekly-day, .attendance-info, .welcome-card { transition: none !important; }
+}
+@media (max-width: 560px) {
+  .dashboard-tabs { top: 6px; }
+}
+
+
+/* =========================================================
+   CORE WEB VITALS: CLS STABILITY PATCH
+   Reserve space for asynchronously populated dashboard content.
+   ========================================================= */
+
+/* Keep the browser's scrollbar from changing the content width. */
+html {
+  scrollbar-gutter: stable;
+}
+
+/* Numeric clock updates should not change text width each second. */
+.live-time {
+  font-variant-numeric: tabular-nums;
+  min-height: 1.25em;
+}
+
+/* Keep the welcome area and tab controls stable while Firebase loads. */
+.welcome-card {
+  min-height: 132px;
+}
+
+.dashboard-tabs {
+  min-height: 56px;
+}
+
+/* Reserve a modest initial area for data-driven sections. */
+#today {
+  min-height: 160px;
+  align-content: start;
+}
+
+#summary {
+  min-height: 120px;
+  align-content: start;
+}
+
+#weeklyTimetable {
+  min-height: 180px;
+  align-content: start;
+}
+
+/* Avoid unexpected image sizing shifts. */
+.whatsapp img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+
+/* Avoid transition-driven layout changes; animate only paint/compositing. */
+.card,
+.summary-card,
+.weekly-day,
+.attendance-info,
+.welcome-card {
+  transition-property: box-shadow, border-color, opacity;
+}
+
+/* Do not let long labels force a sudden horizontal layout expansion. */
+#today > *,
+#summary > *,
+#weeklyTimetable > * {
+  min-width: 0;
+}
+
+@media (max-width: 560px) {
+  .welcome-card {
+    min-height: 120px;
+  }
+  #today {
+    min-height: 140px;
+  }
+}

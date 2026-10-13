@@ -1,7 +1,7 @@
 import { db } from "./firebase.js";
 import { doc, getDoc, getDocs, collection, setDoc, deleteDoc } from "https://www.gstatic.com/firebasejs/12.8.0/firebase-firestore.js";
 
-const uid = sessionStorage.getItem("uid");
+const uid = localStorage.getItem("uid");
 if (!uid) { location.replace("index.html"); throw new Error("No session"); }
 
 const DAYS = ["Monday","Tuesday","Wednesday","Thursday","Friday","Saturday","Sunday"];
@@ -16,9 +16,9 @@ let currentData = {};
 async function verifyAdmin(){
   const snap = await getDoc(doc(db,"users",uid));
   if(!snap.exists() || snap.data().role !== "admin"){
-    sessionStorage.clear(); location.replace("index.html"); throw new Error("Not admin");
+    localStorage.clear(); location.replace("index.html"); throw new Error("Not admin");
   }
-  sessionStorage.setItem("admin","true");
+  localStorage.setItem("admin","true");
 }
 
 async function loadSections(){
@@ -116,7 +116,7 @@ window.toggleHolidayMode=()=>{
 
 function dateList(start,end){
   const out=[]; let d=new Date(`${start}T00:00:00`); const last=new Date(`${end}T00:00:00`);
-  while(d<=last){out.push(d.toLocaleDateString("en-CA"));d.setDate(d.getDate()+1);}
+  while(d<=last){out.push(`${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,"0")}-${String(d.getDate()).padStart(2,"0")}`);d.setDate(d.getDate()+1);}
   return out;
 }
 
